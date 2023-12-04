@@ -1,10 +1,12 @@
 html 
     head 
-        title #{gameData.name}
+        title #{gameData[0].name}
         script(src="gameId.js") 
     body
         #info
-            h3 #{gameData.name}
+            h3 #{gameData[0].name}
         #div1
-            img(src=`${gameData.tumbnail}`, alt="tumbnail",)
-            p #{gameData.short_description}
+            img(src=`${gameData[0].thumbnail}`, alt="thumbnail",)
+            p #{gameData[0].desc}
+            for thing in gameData[0]
+                p #{thing}

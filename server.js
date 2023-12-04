@@ -10,6 +10,9 @@ import authRouter from "./router/auth.js";
 app.set("view engine", "pug");
 app.set("views", "templates");
 
+//adds default parsing capabilities
+app.use(express.json());
+
 //logs incoming requests
 app.use(function(req,res,next){
 	console.log("Method: ", req.method);
@@ -23,7 +26,7 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 
 app.get("/",(req, res)=>{
-    //sends the landing/welcome page file
+    //renders the landing/welcome page
     readFile("templates/pages/welcome.pug", function(err, data){
         if(err){
             res.status(500).end();

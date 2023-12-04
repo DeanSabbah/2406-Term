@@ -1,7 +1,7 @@
-import games, { forEach } from "./data/result.json";
-import users from './data/resultPublishers.json';
+import games from "./data/result.json" assert {type: "json"};
+import users from './data/resultPublishers.json' assert {type: "json"};;
 
-forEach(game =>{
+games.forEach(game =>{
     game.price = parseInt(game.price)
     delete game.developer;
     delete game.score_rank;
@@ -17,6 +17,7 @@ forEach(game =>{
     delete game.discount;
     delete game.ccu;
     game.genre = game.genre.split(", ")
+    game.publisher = game.publisher.split(", ")
 });
 
 import { MongoClient } from "mongodb";
@@ -54,4 +55,3 @@ async function run() {
   }
   // Run the function and handle any errors
   run().catch(console.dir);
-  console.log("hey")
