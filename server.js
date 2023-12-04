@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const fs = require("fs");
-const { MongoClient, ObjectId } = require("mongodb");
+import { readFile } from "fs";
 
-const gameRouter = require("./router/games.js");
-const userRouter = require("./router/users.js");
+import gameRouter from "./router/games.js";
+import userRouter from "./router/users.js";
+import authRouter from "./router/auth.js";
 
 //sets the root folder for all my pug templates and sets the template engine to pug
 app.set("view engine", "pug");
@@ -20,10 +20,11 @@ app.use(function(req,res,next){
 
 app.use("/games", gameRouter);
 app.use("/users", userRouter);
+app.use("/auth", authRouter);
 
 app.get("/",(req, res)=>{
     //sends the landing/welcome page file
-    fs.readFile("templates/pages/welcome.pug", function(err, data){
+    readFile("templates/pages/welcome.pug", function(err, data){
         if(err){
             res.status(500).end();
             return;
@@ -33,21 +34,11 @@ app.get("/",(req, res)=>{
     });
 });
 
-app.get("/gameId.js", (req, res)=>{
-    fs.readFile("client/scripts/gameId.js", (err, data)=>{
-        if(err){
-            console.log("??????????2")
-            res.status(500).end("internal server error");
-            return;
-        }
-        res.status(200).end(data);
-    })
+app.use((req, res)=>{
+    res.body = "Resource not found"
+    res.status(404).render("pages/error", {res:res});
+    res.end();
 });
-
-// Create a new client and connect to MongoDB
-const client = new MongoClient("mongodb://127.0.0.1:27017/");
-let db = client.db("term");
-const gamesCollection = db.collection("games");
 
 async function run() {
 	try {

@@ -1,7 +1,7 @@
-const games = require("./data/result.json")
-//const users = require('./data/users.json');
+import games, { forEach } from "./data/result.json";
+import users from './data/resultPublishers.json';
 
-games.forEach(game =>{
+forEach(game =>{
     game.price = parseInt(game.price)
     delete game.developer;
     delete game.score_rank;
@@ -19,7 +19,7 @@ games.forEach(game =>{
     game.genre = game.genre.split(", ")
 });
 
-const { MongoClient } = require("mongodb");
+import { MongoClient } from "mongodb";
 
 const uri = "mongodb://127.0.0.1:27017/";
 // Create a new client and connect to MongoDB
@@ -36,16 +36,17 @@ async function run() {
       }
       // Insert the defined document into the "games" collection
       const result = await gamesCollection.insertMany(games);
+      console.log("Successfuly inserted " + result.insertedCount + " users.");
       
-      /*const usersCollection = database.collection("users");
-      result1 = await usersCollection.drop();
-      if(result1){
+      const usersCollection = database.collection("users");
+      const result1_u = await usersCollection.drop();
+      if(result1_u){
           console.log("Users collection has been dropped.")
       }
       // Insert the defined document into the "users" collection
-      result = await usersCollection.insertMany(users);*/
+      const result_u = await usersCollection.insertMany(users);
   
-      console.log("Successfuly inserted " + result.insertedCount + " games.");
+      console.log("Successfuly inserted " + result_u.insertedCount + " users.");
     } finally {
        // Close the MongoDB client connection
       await client.close();

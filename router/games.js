@@ -1,6 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const fs = require("fs");
+import { Router } from "express";
+const router = Router();
+import { readFile } from "fs";
+const db = await import("../conn.js").then(module => module.default);
+
+const gamesCollection = db.collection("games");
 
 
 router.use((req, res, next)=>{
@@ -8,4 +11,4 @@ router.use((req, res, next)=>{
 });
 
 
-module.exports = router;
+export default router;
