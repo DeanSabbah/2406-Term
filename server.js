@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
 const fs = require("fs");
-const mongo = require("mongodb");
-const mc = require("mongodb").MongoClient;
+const { MongoClient, ObjectId } = require("mongodb");
+
+const gameRouter = require("./router/games.js");
+const userRouter = require("./router/users.js");
 
 //sets the root folder for all my pug templates and sets the template engine to pug
 app.set("view engine", "pug");
@@ -15,6 +17,9 @@ app.use(function(req,res,next){
 	console.log("Path:   ", req.path);
 	next();
 });
+
+app.use("/games", gameRouter);
+app.use("/users", userRouter);
 
 app.get("/",(req, res)=>{
     //sends the landing/welcome page file
@@ -39,16 +44,17 @@ app.get("/gameId.js", (req, res)=>{
     })
 });
 
-mc.connect("mongodb://127.0.0.1:27017", function(err, client) {
-	if (err) {
-		console.log("Error in connecting to database");
-		console.log(err);
-		return;
+// Create a new client and connect to MongoDB
+const client = new MongoClient("mongodb://127.0.0.1:27017/");
+let db = client.db("term");
+const gamesCollection = db.collection("games");
+
+async function run() {
+	try {
+	} finally {		
+		app.listen(3000);
+		console.log("Server running on Port 3000");
 	}
-	
-	//Set the app.locals.db variale to be the 'data' database
-	db = client.db("term");
-	app.listen(3000);
-	console.log("Server listening on port 3000");
-})
-//console.log("server listening on port 3000");
+}
+// Run the function and handle any errors
+run().catch(console.dir);
