@@ -1,0 +1,11 @@
+html
+    head
+        title Error #{res.statusCode}: #{res.body}
+        link(rel="stylesheet", href="/styles.css")
+    body 
+        include ../partials/header
+        #info
+            h1 Error #{res.statusCode}
+        #content
+            p #{res.body}
+            img(src="https://media.tenor.com/Yv2ty8bP3kgAAAAC/noooo-no.gif", alt="NOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")

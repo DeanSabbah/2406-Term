@@ -1,0 +1,14 @@
+html 
+    head 
+        title #{gameData.name}
+        script(src="gameId.js") 
+        <link  href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.js"></script>
+    body
+        #info
+            h3 #{gameData.name}
+        #div1
+            ul#images
+                for image in gameData.screenshots
+                    li #[img(id=`img_${image.id}` src=`${image.path_full}` alt=`image ${image.id}`)]
+            p #{gameData.short_description}
