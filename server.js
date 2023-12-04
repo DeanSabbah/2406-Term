@@ -1,6 +1,8 @@
 import express from "express";
-const app = express();
+import session from 'express-session';
 import { readFile } from "fs";
+
+const app = express();
 
 import gameRouter from "./router/games.js";
 import userRouter from "./router/users.js";
@@ -12,6 +14,13 @@ app.set("views", "templates");
 
 //adds default parsing capabilities
 app.use(express.json());
+
+app.use(session({
+	secret: 'E4b5JBuO8AI0Lq3yzUn6',
+	cookie: {maxAge:432000000},  //the cookie will expire in 2 hours
+	resave: true,
+	saveUninitialized: true
+}));
 
 //logs incoming requests
 app.use(function(req,res,next){
@@ -38,7 +47,7 @@ app.get("/",(req, res)=>{
 });
 
 app.use((req, res)=>{
-    res.body = "Resource not found"
+    res.body = "Resource not found";
     res.status(404).render("pages/error", {res:res});
     res.end();
 });

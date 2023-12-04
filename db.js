@@ -1,14 +1,8 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
-const client = new MongoClient("mongodb://127.0.0.1:27017/");
-let conn;
-try {
-	conn = await client.connect();
-	console.log("connection to db successful")
-}
-catch(e) {
-	console.error(e);
-}
-let db = conn.db("term");
+await mongoose.connect("mongodb://127.0.0.1:27017/term");
+console.log("connected to db")
+
+let db = mongoose.connection;
 
 export default db;

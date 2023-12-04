@@ -40,6 +40,16 @@ router.route("/login")
     })
     .post(async (req, res)=>{
         var userIn = req.body;
+        var q = await usersCollection.find({"name":userIn.name})
+            .toArray();
+        if(q.length < 1){
+            res.body("User not found");
+            res.status(400).end();
+            return;
+        }
+        if(q[0].password == userIn.password){
+            res.status(200).end();
+        }
     });
 
 export default router;

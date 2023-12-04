@@ -9,19 +9,36 @@ router.use((req, res, next)=>{
     next();
 });
 
+router.get("/gameId.js", (req, res)=>{
+    readFile("./client/scripts/gameId.js", (err, data)=>{
+        if(err){
+            res.status(500).end();
+            return;
+        }
+        res.status(200).end(data);
+    });
+});
+
 router.route("/:appid")
-    .get(async (req, res)=>{
+    .get(async (req, res, next)=>{
         var q = await gamesCollection.find({appid:parseInt(req.params.appid)})
             .toArray();
         console.log(q)
         res.format({
             html: ()=>{
-                res.render("pages/games/gameId", {gameData:q})
+                if(q.length == 0){
+                    res.body = "Resource not found";
+                    res.status(404).render("pages/error", {res:res});
+                    res.end();
+                    return;
+                }
+                res.render("pages/games/gameId", {gameData:q[0]})
             },
             json: ()=>{
                 res.json(q)
             }
         });
         res.status(200).end();
-    })
+    });
+
 export default router;
