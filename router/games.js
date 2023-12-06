@@ -21,18 +21,17 @@ router.get("/gameId.js", (req, res)=>{
 
 router.route("/:appid")
     .get(async (req, res, next)=>{
-        var q = await gamesCollection.find({appid:parseInt(req.params.appid)})
-            .toArray();
+        var q = await gamesCollection.findOne({appid:parseInt(req.params.appid)});
         console.log(q)
         res.format({
             html: ()=>{
-                if(q.length == 0){
+                if(q == null){
                     res.body = "Resource not found";
                     res.status(404).render("pages/error", {res:res});
                     res.end();
                     return;
                 }
-                res.render("pages/games/gameId", {gameData:q[0]})
+                res.render("pages/games/gameId", {gameData:q})
             },
             json: ()=>{
                 res.json(q)

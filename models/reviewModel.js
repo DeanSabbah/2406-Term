@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
 const reviewSchema = mongoose.Schema({
 	user: Schema.Types.ObjectId,
@@ -8,6 +9,6 @@ const reviewSchema = mongoose.Schema({
 	date: Date
 });
 
-const reviewModel = mongoose.model("User", reviewSchema);
+const reviewModel = mongoose.model("Review", reviewSchema, "reviews");
 
 export default reviewModel;

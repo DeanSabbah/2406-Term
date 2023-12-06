@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
 const gameSchema = mongoose.Schema({
 	appid:Number,
@@ -12,6 +13,6 @@ const gameSchema = mongoose.Schema({
 	reviews:[Schema.Types.ObjectId]
 });
 
-const gameModel = mongoose.model("User", gameSchema);
+const gameModel = mongoose.model("Game", gameSchema, "games");
 
 export default gameModel;
