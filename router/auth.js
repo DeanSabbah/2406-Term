@@ -49,7 +49,7 @@ async function login(req, res, next){
 		res.status(401).end("Incorrect password");
         return;
     }
-    req.session.username = nameIn;
+    req.session.username = user.name;
     req.session.loggedin = true;
     res.cookie(user.name, user.password, {httpOnly: true, secure: false, signed: true});
     res.status(200).end("Login successful");
