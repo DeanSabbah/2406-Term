@@ -38,7 +38,7 @@ async function login(req, res, next){
 	}
     var nameIn = req.body.username;
     var passIn = req.body.password;
-    var user = await usersCollection.findOne({"name":nameIn});
+    var user = await usersCollection.findOne({$text:{$search:nameIn}});
     console.log(user);
     if(user == null){
         res.body = "Incorrect username";

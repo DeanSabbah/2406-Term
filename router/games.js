@@ -2,6 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { readFile } from "fs";
 const db = await import("../db.js").then(module => module.default);
+import gameModel from "../models/gameModel.js";
 
 const gamesCollection = db.collection("games");
 

@@ -9,6 +9,8 @@ const userSchema = mongoose.Schema({
 	dob: {type:Date, required:true}
 });
 
+userSchema.index({name:"text"});
+
 const userModel = mongoose.model("User", userSchema, "users");
 
 export default userModel;

@@ -3,15 +3,17 @@ const Schema = mongoose.Schema;
 
 const gameSchema = mongoose.Schema({
 	appid:Number,
-	name:String,
-	publisher:[String],
-	price:Number,
-	thumbnail:String,
-	desc:String,
-	genre:[String],
-	tags:{type:Number},
+	name:{type:String, required:true},
+	publisher:{type:[String], required:true},
+	price:{type:Number, required:true},
+	thumbnail:{type:String, required:true},
+	desc:{type:String, required:true},
+	genre:{type:[String], required:true},
+	tags:{type:Object, required:true, index:true},
 	reviews:[Schema.Types.ObjectId]
 });
+
+gameSchema.index({name:'text', genre:"text"})
 
 const gameModel = mongoose.model("Game", gameSchema, "games");
 
