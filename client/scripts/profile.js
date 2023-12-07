@@ -1,6 +1,6 @@
 function init(userId){
     getData(userId);
-    showData(event, "likes");
+    showData(evt, "likes");
 }
 
 function getData(userId) {
@@ -19,7 +19,7 @@ function getData(userId) {
             likesTab.appendChild(list);
         }
         else{
-            likesTab.innerText = "No reviews";
+            likesTab.innerText = "No likes";
         }
         if(dataIn.reviews != undefined){
             var list = document.createElement("ul");
