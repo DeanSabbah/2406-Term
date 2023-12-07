@@ -1,0 +1,16 @@
+html 
+    head
+        title #{user.name}'s profile
+        link(rel="stylesheet", href="/users/profile.css")
+        link(rel="stylesheet", href="/users/profileTab.css")
+        script(src="/users/profile.js") 
+    body(onload=`init('${user._id}')`)
+        include ../../partials/header.pug
+        h2 #{user.name}'s profile
+        // Tab links
+        .tab
+            button.tablinks(onclick="showData(event, 'likes')") Likes
+            button.tablinks(onclick="showData(event, 'reviews')") Reviews
+        // Tab content
+        #likes.tabcontent
+        #reviews.tabcontent

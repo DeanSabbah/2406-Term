@@ -6,6 +6,8 @@ const userSchema = mongoose.Schema({
 	password: {type:String, required:true},
 	likes: [Schema.Types.ObjectId],
 	reviews: [Schema.Types.ObjectId],
+	following: [Schema.Types.ObjectId],
+	notifications:[Schema.Types.ObjectId],
 	dob: {type:Date, required:true}
 });
 

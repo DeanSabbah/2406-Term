@@ -9,6 +9,7 @@ const secret = ['E4b5JBuO8AI0Lq3yzUn6'];
 import gameRouter from "./router/games.js";
 import userRouter from "./router/users.js";
 import authRouter from "./router/auth.js";
+import searchRouter from "./router/search.js"
 
 //sets the root folder for all my pug templates and sets the template engine to pug
 app.set("view engine", "pug");
@@ -33,12 +34,15 @@ app.use(function(req,res,next){
 	console.log("Path:   ", req.path);
 	console.log("Cookies:	", req.cookies);
 	console.log("Signed Cookies:	", req.signedCookies);
+    console.log("username:  ", req.session.username);
+	console.log("Query:	", req.query);
 	next();
 });
 
 app.use("/games", gameRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
+app.use("/search", searchRouter);
 
 app.get("/",(req, res)=>{
     //renders the landing/welcome/index page
@@ -55,6 +59,17 @@ app.get("/",(req, res)=>{
 app.get("/header.js", (req, res)=>{
     //sends js file for the header
 	readFile("client/scripts/header.js", (err, data)=>{
+		if(err){
+            res.status(500).end();
+            throw err;
+		}
+		res.status(200).end(data);
+	});
+});
+
+app.get("/dropdown.css", (req, res)=>{
+    //sends js file for the header
+	readFile("client/styles/dropdown.css", (err, data)=>{
 		if(err){
             res.status(500).end();
             throw err;

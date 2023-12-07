@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { ObjectId } from "mongodb";
 const router = Router();
 import { readFile } from "fs";
 const db = await import("../db.js").then(module => module.default);
@@ -22,16 +23,16 @@ router.get("/gameId.js", (req, res)=>{
 
 router.route("/:appid")
     .get(async (req, res, next)=>{
-        var q = await gamesCollection.findOne({appid:parseInt(req.params.appid)});
+        var q = await gamesCollection.findOne({"_id":new ObjectId(req.params.appid)});
+        if(q == null){
+            res.body = "Resource not found";
+            res.status(404).render("pages/error", {res:res});
+            res.end();
+            return;
+        }
         console.log(q)
         res.format({
             html: ()=>{
-                if(q == null){
-                    res.body = "Resource not found";
-                    res.status(404).render("pages/error", {res:res});
-                    res.end();
-                    return;
-                }
                 res.render("pages/games/gameId", {gameData:q})
             },
             json: ()=>{

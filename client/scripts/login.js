@@ -22,6 +22,6 @@ function login(){
             return;
         }
         alert(xhttp.responseText);
-        window.open("/", "_self");
+        window.open(document.referrer, "_self");
     }
 }

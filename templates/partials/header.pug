@@ -1,5 +1,5 @@
-script(src="/header.js")
-#header    
+link(rel="stylesheet", href="/dropdown.css")
+#header()
     a(href="/") Home
     | 
     a(href="/auth/login") Login
@@ -7,3 +7,10 @@ script(src="/header.js")
     a(href="/auth/register") Register
     | 
     button#logout(type="button",onclick="logout()") logout
+    | 
+    .dropdown
+        button.dropbtn(onclick='showNotification()') Dropdown
+        #myDropdown.dropdown-content
+    | 
+    a#myProfile(href="/users/myProfile", hidden) My profile
+    script(src="/header.js", onload=("init_header()"))

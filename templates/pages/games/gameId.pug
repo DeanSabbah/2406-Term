@@ -8,4 +8,6 @@ html
             h1 #{gameData.name}
         #div1
             img(src=`${gameData.thumbnail}`, alt="thumbnail",)
+            br
+            a(href=`https://store.steampowered.com/app/${gameData.appid}`) Get the game here
             p #{gameData.desc}

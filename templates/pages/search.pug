@@ -1,0 +1,20 @@
+html
+    head
+        title Search
+        script(src="search/search.js") 
+        link(rel="stylesheet", href="search/search.css")
+    body(onload=("init()"))
+        include ../partials/header
+        h1 Search
+        #search.search
+            form(action="./search", method="get") 
+                input#searchText(type="text", name="search", placeholder="Enter search parameter here", required)
+                br
+                label(for="selector") Select game or user
+                    br
+                    select#searchOption(name="selector")
+                        option(value="game") Game 
+                        option(value="user") User
+                label#pubOnly.pubOnly.hide(for="publisher") #[input#pubOnlyCheck(type="checkbox", name="publisher")]Publisher only
+                br
+                button#submit(type="submit") Search

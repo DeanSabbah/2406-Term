@@ -11,17 +11,6 @@ router.use((req, res, next)=>{
     next();
 });
 
-function logout(req, res, next) {
-	if (req.session.loggedin) {
-		req.session.loggedin = false;
-        res.clearCookie(req.session.username);
-		req.session.username = undefined;
-		res.status(200).send("Logged out.");
-	} else {
-		res.status(400).send("You must be logged in to log out");
-	}
-}
-
 async function auth(req, res, next){
 	if(user.isPub && req.session.loggedin){
 		next();
@@ -29,6 +18,18 @@ async function auth(req, res, next){
 	else{
 		res.status(401).end("unauthorized");
 	}
+}
+
+function logout(req, res, next) {
+	if (req.session.loggedin) {
+		req.session.loggedin = false;
+        res.clearCookie(req.session.username);
+        res.clearCookie("loggedIn");
+		req.session.username = undefined;
+		res.status(200).send("Logged out.");
+        return;
+    }
+	res.status(200).send("Logged out.");
 }
 
 async function login(req, res, next){
@@ -52,6 +53,7 @@ async function login(req, res, next){
     req.session.username = user.name;
     req.session.loggedin = true;
     res.cookie(user.name, user.password, {httpOnly: true, secure: false, signed: true});
+    res.cookie("loggedIn", true, {httpOnly: false, secure: false, signed: false});
     res.status(200).end("Login successful");
 }
 

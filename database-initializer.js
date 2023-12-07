@@ -31,24 +31,64 @@ async function run() {
       const database = client.db("term");
       const gamesCollection = database.collection("games");
       
-      const result1 = await gamesCollection.drop();
+      var result1 = await gamesCollection.drop();
       if(result1){
           console.log("Games collection has been dropped.")
       }
       // Insert the defined document into the "games" collection
-      const result = await gamesCollection.insertMany(games);
-      console.log("Successfuly inserted " + result.insertedCount + " users.");
+      var result = await gamesCollection.insertMany(games);
+      console.log("Successfuly inserted " + result.insertedCount + " games.");
       
       const usersCollection = database.collection("users");
-      const result1_u = await usersCollection.drop();
+      var result1_u = await usersCollection.drop();
       if(result1_u){
           console.log("Users collection has been dropped.")
       }
       // Insert the defined document into the "users" collection
-      const result_u = await usersCollection.insertMany(users);
+      var result_u = await usersCollection.insertMany(users);
   
       console.log("Successfuly inserted " + result_u.insertedCount + " users.");
-    } finally {
+
+      var gamesIn = await gamesCollection.find({"name": {"$exists": true}})
+        .toArray();
+      var usersIn = await usersCollection.find({"name": {"$exists": true}})
+      .toArray();
+      gamesIn.forEach((game)=>{
+        usersIn.forEach((user)=>{
+          if(game.publisher.includes(user.name)){
+            if(!user.games){
+              user.games = [game._id]
+            }
+            else{
+              user.games.push(game._id);
+            }
+            if(!game.publisher_id){
+              game.publisher_id = [user._id];
+            }
+            else{
+              game.publisher_id[game.publisher.indexOf(`${user.name}`)] = user._id;
+            }
+          }
+        })
+      })
+      result1 = await gamesCollection.drop();
+      if(result1){
+          console.log("Games collection has been dropped.")
+      }
+      // Insert the defined document into the "games" collection
+      result = await gamesCollection.insertMany(gamesIn);
+      console.log("Successfuly inserted " + result.insertedCount + " games.");
+      
+      result1_u = await usersCollection.drop();
+      if(result1_u){
+          console.log("Users collection has been dropped.")
+      }
+      // Insert the defined document into the "users" collection
+      result_u = await usersCollection.insertMany(usersIn);
+  
+      console.log("Successfuly inserted " + result_u.insertedCount + " users.");
+    }
+    finally {
        // Close the MongoDB client connection
       await client.close();
     }
