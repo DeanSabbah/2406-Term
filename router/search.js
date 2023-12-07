@@ -5,15 +5,50 @@ import { ObjectId } from "mongodb";
 const db = await import("../db.js").then(module => module.default);
 import gameModel from "../models/gameModel.js";
 import userModel from "../models/userModel.js";
-import reviewModel from "../models/reviewModel.js";
 
 const usersCollection = db.collection("users");
 const gamesCollection = db.collection("games");
-const reviewsCollection = db.collection("reviews");
+const max = 10;
 
 router.get("/", (req, res)=>{
+    console.log("seattt")
     res.status(200).render("pages/search");
     res.end();
+});
+
+router.get("/query", async (req, res)=>{
+    var term = req.query.query;
+    var type = parseInt(req.query.type);
+    var publOnly = (req.query.pubOnly === "true");
+    var start = 0;
+    if(req.query.startPos){
+        start = parseInt(req.query.startPos);
+    }
+    if(!type){
+        var query = await gamesCollection.find({$text:{$search:term}})
+            .limit(max)
+            .skip(start)
+            .toArray();
+        console.log(query);
+        res.json(query);
+    }
+    else{
+        if(publOnly){
+            var query = await usersCollection.find({$text:{$search:term}, isPub:true})
+            .limit(max)
+            .skip(start)
+            .toArray();
+        }
+        else{
+            var query = await usersCollection.find({$text:{$search:term}})
+            .limit(max)
+            .skip(start)
+            .toArray();
+        }
+        console.log(query);
+        res.json(query);
+    }
+    res.status(200).end();
 });
 
 router.get("/search.js", (req, res)=>{

@@ -34,5 +34,6 @@ window.onclick = function(event) {
 function logInCheck(){
     if(document.cookie.includes("loggedIn=true")){
         document.getElementById("myProfile").removeAttribute("hidden");
+        document.getElementById("logout").removeAttribute("hidden");
     }
 }

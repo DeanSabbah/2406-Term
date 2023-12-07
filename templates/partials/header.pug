@@ -6,7 +6,9 @@ link(rel="stylesheet", href="/dropdown.css")
     | 
     a(href="/auth/register") Register
     | 
-    button#logout(type="button",onclick="logout()") logout
+    a(href="/search") Search
+    | 
+    button#logout(type="button",onclick="logout()", hidden) logout
     | 
     .dropdown
         button.dropbtn(onclick='showNotification()') Dropdown
