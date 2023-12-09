@@ -1,10 +1,13 @@
 import express from "express";
 import session from 'express-session';
 import { readFile } from "fs";
-import cookieParser from "cookie-parser";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const secret = ['E4b5JBuO8AI0Lq3yzUn6'];
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 import gameRouter from "./router/games.js";
 import userRouter from "./router/users.js";
@@ -17,14 +20,12 @@ app.set("views", "templates");
 
 //adds default parsing capabilities
 app.use(express.json());
-//add cookie parsing capabilities
-app.use(cookieParser(secret));
 
 app.use(session({
 	secret: secret,
 	resave: false,
 	saveUninitialized: false,
-	cookie:{secure: false, httpOnly: true, signed: true}
+	cookie:{secure: false, httpOnly: true, signed: true, maxAge:1000*60*2}
 }));
 
 //logs incoming requests
@@ -32,10 +33,9 @@ app.use(function(req,res,next){
 	console.log("Method: ", req.method);
 	console.log("URL:    ", req.url);
 	console.log("Path:   ", req.path);
-	console.log("Cookies:	", req.cookies);
-	console.log("Signed Cookies:	", req.signedCookies);
     console.log("username:  ", req.session.username);
 	console.log("Query:	", req.query);
+	console.log("Time:	", new Date().toLocaleString());
 	next();
 });
 
@@ -75,6 +75,16 @@ app.get("/dropdown.css", (req, res)=>{
             throw err;
 		}
 		res.status(200).end(data);
+	});
+});
+
+app.get("/heart-svgrepo-com.svg", (req, res)=>{
+	readFile("resources/icons/heart-svgrepo-com.svg", (err, data)=>{
+		if(err){
+            res.status(500).end();
+            throw err;
+		}
+		res.status(200).sendFile(__dirname+"/resources/icons/heart-svgrepo-com.svg");
 	});
 });
 

@@ -64,7 +64,6 @@ function getMore(){
     xhttp.send();
     xhttp.onload = ()=>{
         var res = JSON.parse(xhttp.response);
-        console.log(searchType);
         var resList = document.getElementById("resList");
         for(item in res){
             if(!searchType){

@@ -11,7 +11,8 @@ const gameSchema = mongoose.Schema({
 	desc:{type:String, required:true},
 	genre:{type:[String], required:true},
 	tags:{type:Object, required:true, index:true},
-	reviews:[Schema.Types.ObjectId]
+	reviews:[{type:Schema.Types.ObjectId, ref:"Review"}],
+	likes:Number
 });
 
 gameSchema.index({name:'text', genre:"text", publisher:"text"})

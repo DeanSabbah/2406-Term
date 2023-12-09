@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const reviewSchema = mongoose.Schema({
-	user: Schema.Types.ObjectId,
-	game: Schema.Types.ObjectId,
+	user: {type:Schema.Types.ObjectId, ref:"User"},
+	game: {type:Schema.Types.ObjectId, ref:"Game"},
 	gameName: String,
 	rating: Number,
 	text: String,

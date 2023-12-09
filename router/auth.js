@@ -3,6 +3,7 @@ const router = Router();
 import { readFile } from "fs";
 import userModel from "../models/userModel.js";
 import publisherModel from "../models/publisherModel.js";
+import session from "express-session";
 
 const db = await import("../db.js").then(module => module.default);
 const usersCollection = db.collection("users");
@@ -23,7 +24,7 @@ async function auth(req, res, next){
 function logout(req, res, next) {
 	if (req.session.loggedin) {
 		req.session.loggedin = false;
-        res.clearCookie(req.session.username);
+        res.clearCookie("username");
         res.clearCookie("loggedIn");
 		req.session.username = undefined;
 		res.status(200).send("Logged out.");
@@ -37,7 +38,7 @@ async function login(req, res, next){
 		res.status(200).send("Already logged in.");
 		return;
 	}
-    var nameIn = req.body.username;
+    var nameIn = '"'+req.body.username.replace(/\s/g, '"\\ \\"')+'"';
     var passIn = req.body.password;
     var user = await usersCollection.findOne({$text:{$search:nameIn}});
     console.log(user);
@@ -52,8 +53,6 @@ async function login(req, res, next){
     }
     req.session.username = user.name;
     req.session.loggedin = true;
-    res.cookie(user.name, user.password, {httpOnly: true, secure: false, signed: true});
-    res.cookie("loggedIn", true, {httpOnly: false, secure: false, signed: false});
     res.status(200).end("Login successful");
 }
 
@@ -84,6 +83,13 @@ async function register(req, res, next){
         });
     res.status(200).end("UserCreated");
 }
+
+router.get("/checkLogin", (req, res)=>{
+    if(!req.session.loggedin){
+        res.status(401).end();
+    }
+    res.status(200).end();
+});
 
 router.route("/register")
     .get((req, res)=>{

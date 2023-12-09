@@ -16,7 +16,7 @@ html
             ul
                 if user.likes.length > 0
                     for like in user.likes
-                        li #[a(href=`/games/${like._id}`) #{like.name}]
+                        li #[a(href=`/games/${like._id}`) #{like.name}] #[img.like.hide(src="/heart-svgrepo-com.svg", alt="liked", width="15", height="15", onclick=(`removeLike('${like._id}')`))]
                 else 
                     p No likes
         #reviews.tabcontent

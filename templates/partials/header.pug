@@ -10,9 +10,10 @@ link(rel="stylesheet", href="/dropdown.css")
     | 
     button#logout(type="button",onclick="logout()", hidden) logout
     | 
-    .dropdown
+    #dropdown.dropdown.hide(hidden)
         button.dropbtn(onclick='showNotification()') Dropdown
-        #myDropdown.dropdown-content
+        #notifications.dropdown-content
+            a No notifications
     | 
     a#myProfile(href="/users/myProfile", hidden) My profile
     script(src="/header.js", onload=("init_header()"))

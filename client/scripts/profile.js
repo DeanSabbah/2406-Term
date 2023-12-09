@@ -1,38 +1,7 @@
-function init(userId){
-    getData(userId);
-    showData(evt, "likes");
+function init(){
+    showData(event, "likes");
 }
 
-function getData(userId) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", `${userId}/data`);
-    xhttp.send();
-    xhttp.onload = ()=>{
-        var dataIn = JSON.parse(xhttp.response);
-        var likesTab = document.getElementById("likes");
-        var reviewsTab = document.getElementById("reviews");
-        if(dataIn.likes != undefined){
-            var list = document.createElement("ul");
-            for(var i = 0; i < dataIn.likes.length; i++){
-                list.innerHTML += `<li id="${dataIn.likes[i]._id}_like"><a href="/games/${dataIn.likes[i]._id}">${dataIn.likes[i].name}</a></li>`;
-            }
-            likesTab.appendChild(list);
-        }
-        else{
-            likesTab.innerText = "No likes";
-        }
-        if(dataIn.reviews != undefined){
-            var list = document.createElement("ul");
-            for(var i = 0; i < dataIn.reviews.length; i++){
-                list.innerHTML += `<li id="${dataIn.reviews[i]._id}_review"><a href="/games/${dataIn.reviews[i].game}">${dataIn.reviews[i].gameName}</a><br><p>${dataIn.reviews[i].text}</p></li>`;
-            }
-            reviewsTab.appendChild(list);
-        }
-        else{
-            reviewsTab.innerText = "No reviews";
-        }
-    }
-}
 
 function showData(evt, dataType) {
     // Declare all variables
@@ -53,4 +22,8 @@ function showData(evt, dataType) {
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(dataType).style.display = "block";
     evt.currentTarget.className += " active";
+}
+
+function removeLike(gameId){
+    alert(gameId);
 }

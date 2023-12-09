@@ -20,6 +20,11 @@ function register(){
             return;
         }
         alert(xhttp.responseText);
+        console.log(document.referrer)
+        if(document.referrer == ""){
+            window.open("/", "_self");
+            return;
+        }
         window.open(document.referrer, "_self");
     }
 }

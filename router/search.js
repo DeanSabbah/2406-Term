@@ -11,13 +11,13 @@ const gamesCollection = db.collection("games");
 const max = 10;
 
 router.get("/", (req, res)=>{
-    console.log("seattt")
     res.status(200).render("pages/search");
     res.end();
 });
 
 router.get("/query", async (req, res)=>{
-    var term = req.query.query;
+    var term = '"'+req.query.query.replace(/\s/g, '"\\ \\"')+'"';
+    console.log(term);
     var type = parseInt(req.query.type);
     var publOnly = (req.query.pubOnly === "true");
     var start = 0;
@@ -29,7 +29,6 @@ router.get("/query", async (req, res)=>{
             .limit(max)
             .skip(start)
             .toArray();
-        console.log(query);
         res.json(query);
     }
     else{

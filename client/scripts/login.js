@@ -22,6 +22,10 @@ function login(){
             return;
         }
         alert(xhttp.responseText);
+        if(document.referrer == ""){
+            window.open("/", "_self");
+            return;
+        }
         window.open(document.referrer, "_self");
     }
 }
