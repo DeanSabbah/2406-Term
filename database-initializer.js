@@ -16,19 +16,33 @@ games.forEach(game =>{
     delete game.initialprice;
     delete game.discount;
     delete game.ccu;
-    game.genre = game.genre.split(", ")
-    game.publisher = game.publisher.split(", ")
+    game.genre = game.genre.split(", ");
+    game.publisher = game.publisher.split(", ");
+    game.likes = 0;
+    var tag_ar = [];
+    var n = 0
+    for(var tag in game.tags){
+      tag_ar[n] = tag;
+      n++;
+    }
+    game.tags = tag_ar;
 });
 
-import { MongoClient } from "mongodb";
+users.forEach(user =>{
+  user.dob = "1900-01-01";
+  user.isPub = true;
+})
 
-const uri = "mongodb://127.0.0.1:27017/";
-// Create a new client and connect to MongoDB
-const client = new MongoClient(uri);
-async function run() {
+import mongoose from "mongoose";
+import gameModel from "./models/gameModel.js";
+import userModel from "./models/userModel.js";
+
+async function run() { 
     try {
       // Connect to the "term" database
-      const database = client.db("term");
+      await mongoose.connect("mongodb://127.0.0.1:27017/term");
+      console.log("connected to db")
+      const database = mongoose.connection;
       const gamesCollection = database.collection("games");
       
       var result1 = await gamesCollection.drop();
@@ -36,7 +50,7 @@ async function run() {
           console.log("Games collection has been dropped.")
       }
       // Insert the defined document into the "games" collection
-      var result = await gamesCollection.insertMany(games);
+      var result = await gameModel.insertMany(games);
       console.log("Successfuly inserted " + result.insertedCount + " games.");
       
       const usersCollection = database.collection("users");
@@ -45,7 +59,14 @@ async function run() {
           console.log("Users collection has been dropped.")
       }
       // Insert the defined document into the "users" collection
-      var result_u = await usersCollection.insertMany(users);
+      var result_u = await userModel.insertMany(users);
+
+      const reviewCollection = database.collection("reviews")
+      var result1_r = await reviewCollection.drop();
+
+      if(result1_r){
+        console.log("Reviews collection has been dropped.")
+    }
   
       console.log("Successfuly inserted " + result_u.insertedCount + " users.");
 
@@ -89,8 +110,8 @@ async function run() {
       console.log("Successfuly inserted " + result_u.insertedCount + " users.");
     }
     finally {
-       // Close the MongoDB client connection
-      await client.close();
+       // Close the Mongoose connection
+      mongoose.connection.close()
     }
   }
   // Run the function and handle any errors

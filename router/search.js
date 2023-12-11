@@ -15,39 +15,42 @@ router.get("/", (req, res)=>{
     res.end();
 });
 
-router.get("/query", async (req, res)=>{
-    var term = '"'+req.query.query.replace(/\s/g, '"\\ \\"')+'"';
-    console.log(term);
-    var type = parseInt(req.query.type);
-    var publOnly = (req.query.pubOnly === "true");
-    var start = 0;
-    if(req.query.startPos){
-        start = parseInt(req.query.startPos);
-    }
-    if(!type){
-        var query = await gamesCollection.find({$text:{$search:term}})
-            .limit(max)
-            .skip(start)
-            .toArray();
-        res.json(query);
-    }
-    else{
-        if(publOnly){
-            var query = await usersCollection.find({$text:{$search:term}, isPub:true})
-            .limit(max)
-            .skip(start)
-            .toArray();
+router.get("/query", async (req, res) => {
+    try {
+        var term = '"' + req.query.query.replace(/\s/g, '"\\ \\"') + '"';
+        console.log(term);
+        var type = parseInt(req.query.type);
+        var publOnly = req.query.pubOnly === "true";
+        var start = 0;
+        if (req.query.startPos) {
+            start = parseInt(req.query.startPos);
         }
-        else{
-            var query = await usersCollection.find({$text:{$search:term}})
-            .limit(max)
-            .skip(start)
-            .toArray();
+        if (!type) {
+            var query = await gamesCollection.find({ $text: { $search: term } })
+                .limit(max)
+                .skip(start)
+                .toArray();
+            res.json(query);
+        } else {
+            if (publOnly) {
+                var query = await usersCollection.find({ $text: { $search: term }, isPub: true })
+                    .limit(max)
+                    .skip(start)
+                    .toArray();
+            } else {
+                var query = await usersCollection.find({ $text: { $search: term } })
+                    .limit(max)
+                    .skip(start)
+                    .toArray();
+            }
+            console.log(query);
+            res.json(query);
         }
-        console.log(query);
-        res.json(query);
+        res.status(200).end();
+    } catch (error) {
+        console.error(error);
+        res.status(500).end("Server error");
     }
-    res.status(200).end();
 });
 
 router.get("/search.js", (req, res)=>{

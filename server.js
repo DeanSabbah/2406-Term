@@ -20,12 +20,13 @@ app.set("views", "templates");
 
 //adds default parsing capabilities
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
 	secret: secret,
 	resave: false,
 	saveUninitialized: false,
-	cookie:{secure: false, httpOnly: true, signed: true, maxAge:1000*60*2}
+	cookie:{secure: false, httpOnly: true, signed: true}
 }));
 
 //logs incoming requests
@@ -33,9 +34,9 @@ app.use(function(req,res,next){
 	console.log("Method: ", req.method);
 	console.log("URL:    ", req.url);
 	console.log("Path:   ", req.path);
-    console.log("username:  ", req.session.username);
-	console.log("Query:	", req.query);
-	console.log("Time:	", new Date().toLocaleString());
+    console.log("ID:	 ", req.session.uid);
+	console.log("Query:	 ", req.query);
+	console.log("Time:	 ", new Date().toLocaleString());
 	next();
 });
 
@@ -78,13 +79,14 @@ app.get("/dropdown.css", (req, res)=>{
 	});
 });
 
-app.get("/heart-svgrepo-com.svg", (req, res)=>{
-	readFile("resources/icons/heart-svgrepo-com.svg", (err, data)=>{
+app.get("/styles.css", (req, res)=>{
+    //sends js file for the header
+	readFile("client/styles/styles.css", (err, data)=>{
 		if(err){
             res.status(500).end();
             throw err;
 		}
-		res.status(200).sendFile(__dirname+"/resources/icons/heart-svgrepo-com.svg");
+		res.status(200).end(data);
 	});
 });
 

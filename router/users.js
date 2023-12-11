@@ -35,69 +35,156 @@ router.get("/profile.js", (req, res)=>{
     });
 });
 
-router.route("/notificaiton")
-    /* will update to only send necessary data if I have time 😪  */
-    .get(async (req, res)=>{
-        var username = '"'+req.session.username.replace(/\s/g, '"\\ \\"')+'"';
-        var user = await userModel.findOne({$text:{$search:username}})
-            .populate({path:"notifications"})
-            .exec();
-        res.status(200).end(JSON.stringify(user));
-    })
-    .delete(async (req, res)=>{
-        var username = '"'+req.session.username.replace(/\s/g, '"\\ \\"')+'"';
-        await userModel.findOneAndUpdate({$text:{$search:username}}, {notifications:[]}).exec();
-        res.status(200).end();
-    });
-
-router.route("/myProfile")
-    .get(async (req, res)=>{
-        var username = '"'+req.session.username.replace(/\s/g, '"\\ \\"')+'"';
-        if(!username || !req.session.loggedin){
-            res.status(401).end("not logged in");
-            return;
-        }
-        var user = await userModel
-            .findOne({$text:{$search:username}})
-            .populate("likes")
-            .populate("reviews")
-            .exec();
-        if(user == null){
+router.get("/profile.css", (req, res)=>{
+    readFile("./client/styles/profile.css", (err, data)=>{
+        if(err){
             res.status(500).end("Server error");
             return;
         }
-        res.render("pages/profiles/ownUserPage",{user:user});
-        res.status(200).end();
+        res.status(200).end(data);
     });
+});
+
+router.route("/follow")
+    .put(async (req, res)=>{
+        try{
+            await userModel.findByIdAndUpdate(req.session.uid, {$push:{following:req.body.uid}})
+                .exec();
+            await userModel.findByIdAndUpdate(req.body.uid, {$push:{followers:req.session.uid}})
+                .exec();
+            res.status(200).end();
+        }
+        catch(e){
+            console.error(e);
+            res.status(500).end("server error");
+        }
+    })
+    .delete(async (req, res)=>{
+        try{
+            await userModel.findByIdAndUpdate(req.session.uid, {$pull:{following:req.body.uid}})
+                .exec();
+            await userModel.findByIdAndUpdate(req.body.uid, {$pull:{followers:req.session.uid}})
+                .exec();
+            res.status(200).end();
+        }
+        catch(e){
+            console.error(e);
+            res.status(500).end("server error");
+        }
+    });
+
+router.route("/notificaiton")
+    /* will update to only send necessary data if I have time 😪  */
+    .get(async (req, res)=>{
+        try {
+            var user = await userModel.findById(req.session.uid)
+                .populate({path:"notifications"})
+                .exec();
+            res.status(200).end(JSON.stringify(user));
+        } catch (e) {
+            console.error(e);
+            res.status(500).end();
+        }
+    })
+    .delete(async (req, res)=>{
+        try {
+            await userModel.findByIdAndUpdate(req.session.uid, {notifications:[]}).exec();
+            res.status(200).end();
+        } catch(e){
+            console.error(e);
+            res.status(500).end();
+        }
+    });
+
+router.put("/checkFollowing", async (req, res)=>{
+    try{
+        var user = await userModel.findById(req.session.uid)
+            .populate("following")
+            .exec();
+        for(var item in user.following){
+            if(req.body.uid == user.following[item].id){
+                res.status(200).end('true');
+                return;
+            }
+        }
+        res.status(200).end('false');
+    }
+    catch(e){
+        console.error(e);
+        res.status(500).end();
+    }
+});
+
+router.put("/checkLiked", async (req, res)=>{
+    try{
+        var user = await userModel.findById(req.session.uid)
+            .populate("likes")
+            .exec();
+        var game = await gameModel.findById(req.body.gid)
+            .exec();
+        for(var item in user.likes){
+            if(user.likes[item].id == game.id){
+                res.status(200).end('true');
+                return;
+            }
+        }
+        res.status(200).end('false');
+    }
+    catch(e){
+        console.error(e);
+        res.status(500).end();
+    }
+});
 
 router.route("/:uid")
     .get(async (req, res)=>{
-        var user = await userModel
-            .findById(req.params.uid)
-            .populate("likes")
-            .populate("reviews")
-            .exec();
-        if(!user){
-            res.body = "user not found";
-            res.status(404).render("pages/error",{res:res})
+        try {
+            var id = req.params.uid;
+            if(req.params.uid == "myProfile"){
+                id = req.session.uid;
+            }
+            var user = await userModel
+                .findById(id)
+                .populate("likes")
+                .populate({
+                    path:"reviews",
+                    populate:{path:"game"}
+                })
+                .populate("games")
+                .exec();
+        }
+        catch(e){
+            res.body = "Bad request";
+            res.status(400).render("pages/error",{res:res})
             res.end();
             return;
         }
-        console.log(user);
-        res.format({
-            html: ()=>{
-                if(req.session.username != user.name){
-                    res.render("pages/profiles/userPage",{user:user});
-                }
-                else{
-                    res.render("pages/profiles/ownUserPage",{user:user});
-                }
-            },
-            json: ()=>{
-                res.json(user);
+        try{
+            if(!user){
+                res.body = "user not found";
+                res.status(404).render("pages/error",{res:res})
+                res.end();
+                return;
             }
-        });
-        res.status(200).end();
+            console.log(user);
+            res.format({
+                html: ()=>{
+                    if(req.session.uid != user._id){
+                        res.render("pages/profiles/userPage",{user:user});
+                    }
+                    else{
+                        res.render("pages/profiles/ownUserPage",{user:user});
+                    }
+                },
+                json: ()=>{
+                    res.json(user);
+                }
+            });
+            res.status(200).end();
+        } catch (error) {
+            console.error(error);
+            res.status(500).end();
+        }
     })
 
 export default router;

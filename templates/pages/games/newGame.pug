@@ -1,0 +1,41 @@
+html 
+    head
+        title New Game
+        script(src="newGame.js") 
+    body(onload="init()")
+        include ../../partials/header
+        #content.col.center
+            form#newGameForm
+                label(for="name") Name 
+                br
+                input#name(type="text", name="name", placeholder="Name", required)
+                br 
+                label(for="appid") Steam appid if applicable
+                | 
+                label(for="price") Price
+                br
+                input#appid(type="number", name="appid", placeholder="Leave empty if none")
+                input#price(type="number", name="price", placeholder="Price", required)
+                br
+                label(for="tumbnail") URL to thumbnail
+                br
+                input#thumbnail(type="url", name="thumbnail", placeholder="Thumbnail URL", required)
+                br
+                label(for="desc") Description
+                br
+                textarea#desc(name="desc", cols="60", rows="10", placeholder="Description", required)
+                br
+                label(for="genres") Genres 
+                br
+                input#genres(type="text", name="genres", placeholder="Seperate with commas followed by a space", required)
+                br
+                label(for="tags") Tags
+                br
+                input#tags(type="text", name="tags", placeholder="Seperate with commas followed by a space", required)
+                br
+                label(for="release_date") Release Date
+                br
+                input#release_date(type="date", name="release_date", placeholder="Release date", required)
+                br
+                br
+                button#submit.button(type="submit") Submit

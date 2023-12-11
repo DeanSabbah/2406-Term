@@ -9,7 +9,9 @@ const userSchema = mongoose.Schema({
 	following: [{type:Schema.Types.ObjectId, ref:"User"}],
     followers:[{type:Schema.Types.ObjectId, ref:"User"}],
 	notifications:[{type:Schema.Types.ObjectId, ref:"Game"}],
-	dob: {type:Date, required:true}
+	dob: {type:Date, required:true},
+	isPub:Boolean,
+    games: [{type:Schema.Types.ObjectId, ref:"Game"}]
 });
 
 userSchema.index({name:"text"});
