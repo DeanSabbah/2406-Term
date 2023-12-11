@@ -124,7 +124,7 @@ router.route("/newGame")
                 var newGame = await gameModel.create({ name: req.body.name, publisher: [user.name], publisher_id: [req.session.uid], price: req.body.price*100, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
             }
             else {
-                var newGame = await gameModel.create({ appid: req.body.appid, publisher: [user.name], name: req.body.name, publisher_id: [req.session.uid], price: req.body.price, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
+                var newGame = await gameModel.create({ appid: req.body.appid, publisher: [user.name], name: req.body.name, publisher_id: [req.session.uid], price: req.body.price*100, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
             }
             var notification = await notificationModel.create({docModel:"Game", doc:newGame.id});
             for(var id in user.followers){

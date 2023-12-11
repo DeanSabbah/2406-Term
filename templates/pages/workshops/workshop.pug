@@ -7,6 +7,7 @@ html
         include ../../partials/header
         #info.col.left
             h1 #{data.name}
+            h3 By #{data.publisher[0]}
             p Workshop date: #{data.date}
             button#enroll.button.enroll(onclick="enroll()") Enroll
             p#desc #{data.desc}

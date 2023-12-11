@@ -52,6 +52,10 @@ function isOwn(){
         if(xhttp.responseText === "true"){
             document.getElementById("followButton").hidden = true;
             document.getElementById("likeButton").hidden = true;
+            document.getElementById("followButton").disabled = true;
+            document.getElementById("reviewText").disabled = true;
+            document.getElementById("reviewText").setAttribute("placeholder", "Cannot review own game");
+            document.getElementById("reviewSubmit").disabled = true;
         }
     }
 }
