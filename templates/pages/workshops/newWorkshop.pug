@@ -1,0 +1,22 @@
+html 
+    head
+        title New Workshop
+        script(src="newWorkshop.js") 
+    body(onload="init()")
+        include ../../partials/header
+        #content.col.center
+            form#form
+                label(for="name") Name 
+                br
+                input#name(type="text", name="name", placeholder="Name", required)
+                br
+                label(for="desc") Description
+                br
+                textarea#desc(name="desc", cols="60", rows="10", placeholder="Description", required)
+                br
+                label(for="release_date") Date
+                br
+                input#date(type="date", name="date", placeholder="Date", required)
+                br
+                br
+                button#submit.button(type="submit") Submit

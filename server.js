@@ -1,18 +1,15 @@
 import express from "express";
 import session from 'express-session';
 import { readFile } from "fs";
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 
 const app = express();
 const secret = ['E4b5JBuO8AI0Lq3yzUn6'];
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 import gameRouter from "./router/games.js";
 import userRouter from "./router/users.js";
 import authRouter from "./router/auth.js";
 import searchRouter from "./router/search.js"
+import workshopRouter from "./router/workshops.js"
 
 //sets the root folder for all my pug templates and sets the template engine to pug
 app.set("view engine", "pug");
@@ -20,7 +17,6 @@ app.set("views", "templates");
 
 //adds default parsing capabilities
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
 	secret: secret,
@@ -44,6 +40,7 @@ app.use("/games", gameRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/search", searchRouter);
+app.use("/workshops", workshopRouter);
 
 app.get("/",(req, res)=>{
     //renders the landing/welcome/index page

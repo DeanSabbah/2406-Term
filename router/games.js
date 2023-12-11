@@ -4,15 +4,16 @@ import { readFile } from "fs";
 import gameModel from "../models/gameModel.js";
 import userModel from "../models/userModel.js";
 import reviewModel from "../models/reviewModel.js";
+import notificationModel from "../models/notificationModel.js";
+
+router.use((req, res, next)=>{
+    next();
+});
 
 async function checkPub(req, res){
     var user = await userModel.findById(req.session.uid).exec();
     return user.isPub;
 }
-
-router.use((req, res, next)=>{
-    next();
-});
 
 router.get("/gameId.js", (req, res)=>{
     readFile("./client/scripts/gameId.js", (err, data)=>{
@@ -106,8 +107,7 @@ router.route("/newGame")
         res.status(200).end();
     })
     .post(async (req, res) => {
-        try {
-            console.log(req.body);
+        try {;
             var genre = req.body.genres.split(", ");
             var tags = req.body.tags.split(", ");
             var user = await userModel.findById(req.session.uid).exec();
@@ -126,8 +126,9 @@ router.route("/newGame")
             else {
                 var newGame = await gameModel.create({ appid: req.body.appid, publisher: [user.name], name: req.body.name, publisher_id: [req.session.uid], price: req.body.price, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
             }
+            var notification = await notificationModel.create({docModel:"Game", doc:newGame.id});
             for(var id in user.followers){
-                await userModel.findByIdAndUpdate(user.followers[id], {$push:{notifications:newGame.id}});
+                await userModel.findByIdAndUpdate(user.followers[id], {$push:{notifications:notification.id}});
             }
             await userModel.findByIdAndUpdate(req.session.uid, {$push:{games:newGame.id}}).exec();
             res.status(200).end(JSON.stringify({id:newGame.id}));
@@ -167,6 +168,6 @@ router.route("/:appid")
             console.error(e);
             res.status(500).end();
         }
-    });
+    })
 
 export default router;

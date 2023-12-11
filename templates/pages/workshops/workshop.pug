@@ -1,0 +1,16 @@
+html
+    head
+        title #{data.name} Workshop
+        link(rel="stylesheet", href="workshop.css")
+        script(src="workshop.js")
+    body(onload=`init("${data._id}")`)
+        include ../../partials/header
+        #info.col.left
+            h1 #{data.name}
+            p Workshop date: #{data.date}
+            button#enroll.button.enroll(onclick="enroll()") Enroll
+            p#desc #{data.desc}
+        #enrolled.col.right
+            h3 Enrolled users:
+            for user in data.enrolled
+                a(href=`/users/${user._id}`) #{user.name}

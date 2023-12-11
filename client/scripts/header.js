@@ -49,15 +49,22 @@ function showElms(){
             return;
         }
         var notifications = document.getElementById("notifications");
+        var badge = document.createElement("span");
+        badge.classList.add("badge");
         notifications.innerHTML = "";
-        var publishers = "";
+        var badgeNum = 0;
         for(item in dataIn.notifications){
-            for(publisher in dataIn.notifications[item].publisher){
-                console.log(publisher)
-                publishers += dataIn.notifications[item].publisher[publisher];
+            badgeNum++;
+            document.getElementById("dropdown").appendChild(badge);
+            console.log(dataIn.notifications);
+            if(dataIn.notifications[item].docModel == "Game"){
+                notifications.innerHTML += `<a href="/games/${dataIn.notifications[item].doc._id}"> ${dataIn.notifications[item].doc.name} by ${dataIn.notifications[item].doc.publisher[0]}</a>`;
             }
-            notifications.innerHTML += `<a href="/games/${dataIn.notifications[item]._id}"> ${dataIn.notifications[item].name} by ${publishers}</a>`;
+            else{
+                notifications.innerHTML += `<a href="/workshops/${dataIn.notifications[item].doc._id}"> ${dataIn.notifications[item].doc.name} by ${dataIn.notifications[item].doc.publisher[0]}</a>`;
+            }
         }
+        badge.innerText = badgeNum;
     }
 }
 

@@ -1,11 +1,3 @@
-
-.delete{
-    background-color: red !important;
-    width: 60px !important;
-}
-.delete:hover{
-    background-color: darkred !important;
-}
 .likeButton{
     border: none;
     background-color: inherit;;

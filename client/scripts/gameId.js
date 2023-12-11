@@ -7,6 +7,7 @@ async function init(gid, uid){
     if(await logInCheck()){
         checkLiked();
         checkFollowing();
+        isOwn();
     }
     else{
         document.getElementById("followButton").disabled = true;
@@ -38,6 +39,19 @@ function checkFollowing(){
         if(xhttp.responseText === "true"){
             document.getElementById("followButton").setAttribute("onclick", "unfollow()");
             document.getElementById("followButton").innerText = "Following";
+        }
+    }
+}
+
+function isOwn(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("PUT", "/users/isOwn");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({gid:gameId}));
+    xhttp.onload = ()=>{
+        if(xhttp.responseText === "true"){
+            document.getElementById("followButton").hidden = true;
+            document.getElementById("likeButton").hidden = true;
         }
     }
 }

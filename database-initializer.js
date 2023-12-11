@@ -67,6 +67,22 @@ async function run() {
       if(result1_r){
         console.log("Reviews collection has been dropped.")
     }
+
+    const workshopCollection = database.collection("workshops")
+      var result1_w = await workshopCollection.drop();
+
+      if(result1_w){
+        console.log("Reviews collection has been dropped.")
+    }
+
+    const notificaitonCollection = database.collection("notofications")
+      var result1_n = await notificaitonCollection.drop();
+
+      if(result1_n){
+        console.log("Reviews collection has been dropped.")
+    }
+
+    
   
       console.log("Successfuly inserted " + result_u.insertedCount + " users.");
 

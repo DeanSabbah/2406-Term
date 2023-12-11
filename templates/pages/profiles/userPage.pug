@@ -14,6 +14,8 @@ html
             button.tablinks(onclick="showData(event, 'games')") Games
             button.tablinks(onclick="showData(event, 'likes')") Likes
             button.tablinks(onclick="showData(event, 'reviews')") Reviews
+            button.tablinks(onclick="showData(event, 'workshops')") Workshops
+            button.tablinks(onclick="showData(event, 'enrolled')") Enrolled
         // Tab content
         #games.tabcontent 
             if user.games
@@ -44,3 +46,19 @@ html
                             p #{review.text}
                 else 
                     p No reviews
+        #workshops.tabcontent
+            if user.workshops.length > 0
+                ul
+                    for workshop in user.workshops
+                        li
+                            a(href=`/workshops/${workshop.id}`) #{workshop.name}
+            else
+                p No workshops
+        #enrolled.tabcontent
+            if user.enrolled.length > 0
+                ul
+                    for workshop in user.enrolled
+                        li
+                            a(href=`/workshops/${workshop.id}`) #{workshop.name}
+            else
+                p No workshops

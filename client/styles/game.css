@@ -7,13 +7,6 @@
     padding-left: 1%;
     padding-bottom: 2%;
 }
-.right{
-    max-width: 20%;
-    right: 0;
-}
-.left{
-    width: 80%;
-}
 .lower{
     margin-top: -40px;
 }
@@ -36,6 +29,12 @@
 }
 .liked{
     color:hotpink !important
+}
+.delete{
+    background-color: red !important;
+}
+.delete:hover{
+    background-color: darkred !important;
 }
 #likes{
     margin-left: 745px;

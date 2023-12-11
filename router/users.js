@@ -3,7 +3,7 @@ const router = Router();
 import { readFile } from "fs";
 import gameModel from "../models/gameModel.js";
 import userModel from "../models/userModel.js";
-import reviewModel from "../models/reviewModel.js";
+import notificationModel from "../models/notificationModel.js";
 
 router.get("/profile.css", (req, res)=>{
     readFile("./client/styles/profile.css", (err, data)=>{
@@ -48,10 +48,8 @@ router.get("/profile.css", (req, res)=>{
 router.route("/follow")
     .put(async (req, res)=>{
         try{
-            await userModel.findByIdAndUpdate(req.session.uid, {$push:{following:req.body.uid}})
-                .exec();
-            await userModel.findByIdAndUpdate(req.body.uid, {$push:{followers:req.session.uid}})
-                .exec();
+            await userModel.findByIdAndUpdate(req.session.uid, {$push:{following:req.body.uid}}).exec();
+            await userModel.findByIdAndUpdate(req.body.uid, {$push:{followers:req.session.uid}}).exec();
             res.status(200).end();
         }
         catch(e){
@@ -61,10 +59,8 @@ router.route("/follow")
     })
     .delete(async (req, res)=>{
         try{
-            await userModel.findByIdAndUpdate(req.session.uid, {$pull:{following:req.body.uid}})
-                .exec();
-            await userModel.findByIdAndUpdate(req.body.uid, {$pull:{followers:req.session.uid}})
-                .exec();
+            await userModel.findByIdAndUpdate(req.session.uid, {$pull:{following:req.body.uid}}).exec();
+            await userModel.findByIdAndUpdate(req.body.uid, {$pull:{followers:req.session.uid}}).exec();
             res.status(200).end();
         }
         catch(e){
@@ -78,7 +74,7 @@ router.route("/notificaiton")
     .get(async (req, res)=>{
         try {
             var user = await userModel.findById(req.session.uid)
-                .populate({path:"notifications"})
+                .populate({path:"notifications", populate:{path:"doc"}})
                 .exec();
             res.status(200).end(JSON.stringify(user));
         } catch (e) {
@@ -88,7 +84,12 @@ router.route("/notificaiton")
     })
     .delete(async (req, res)=>{
         try {
-            await userModel.findByIdAndUpdate(req.session.uid, {notifications:[]}).exec();
+            var user = await userModel.findById(req.session.uid).exec();
+            for(var i in user.notifications){
+                await notificationModel.deleteOne(user.notifications[i]);
+            }
+            user.notifications = [];
+            await user.save();
             res.status(200).end();
         } catch(e){
             console.error(e);
@@ -136,6 +137,24 @@ router.put("/checkLiked", async (req, res)=>{
     }
 });
 
+router.put("/isOwn", async (req, res)=>{
+    try{
+        var user = await userModel.findById(req.session.uid)
+            .exec();
+        for(var item in user.games){
+            if(user.games[item] == req.body.gid){
+                res.status(200).end('true');
+                return;
+            }
+        }
+        res.status(200).end('false');
+    }
+    catch(e){
+        console.error(e);
+        res.status(500).end();
+    }
+});
+
 router.route("/:uid")
     .get(async (req, res)=>{
         try {
@@ -143,14 +162,15 @@ router.route("/:uid")
             if(req.params.uid == "myProfile"){
                 id = req.session.uid;
             }
-            var user = await userModel
-                .findById(id)
+            var user = await userModel.findById(id)
                 .populate("likes")
                 .populate({
                     path:"reviews",
                     populate:{path:"game"}
                 })
                 .populate("games")
+                .populate("workshops")
+                .populate("enrolled")
                 .exec();
         }
         catch(e){

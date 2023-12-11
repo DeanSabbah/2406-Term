@@ -2,10 +2,6 @@ import { Router } from "express";
 const router = Router();
 import { readFile } from "fs";
 import userModel from "../models/userModel.js";
-import session from "express-session";
-
-const db = await import("../db.js").then(module => module.default);
-const usersCollection = db.collection("users");
 
 router.use((req, res, next)=>{
     next();

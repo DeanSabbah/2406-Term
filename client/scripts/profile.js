@@ -7,6 +7,7 @@ async function init(uid){
         checkFollowing();
         if(await pubCheck()){
             document.getElementById("postGame").hidden = false;
+            document.getElementById("postWorkshop").hidden = false;
         }
     }
     else{
@@ -105,6 +106,18 @@ async function togglePub(){
             if(xhttp.status == 200){
                 location.reload();
             }
+        }
+    }
+}
+
+function unenroll(wid){
+    var xhttp = new XMLHttpRequest()
+    xhttp.open("DELETE", "/workshops/enroll");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({wid:wid}));
+    xhttp.onload = ()=>{
+        if(xhttp.status == 200){
+            location.reload();
         }
     }
 }

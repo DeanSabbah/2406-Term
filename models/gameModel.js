@@ -11,7 +11,7 @@ const gameSchema = mongoose.Schema({
 	desc:{type:String, required:true},
 	genre:{type:[String], required:true},
 	tags:{type:[String], required:true},
-	release_date:Date,
+	release_date:{type:Date},
 	reviews:[{type:Schema.Types.ObjectId, ref:"Review"}],
 	likes:Number
 });
