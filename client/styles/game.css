@@ -1,0 +1,69 @@
+.followText{
+    padding-right: 5px;
+}
+.col {
+    float: left;
+    padding-right: 1%;
+    padding-left: 1%;
+    padding-bottom: 2%;
+}
+.lower{
+    margin-top: -40px;
+}
+
+.likeText{
+    margin-top: -10px;
+}
+.likeButton{
+    border: none;
+    background-color: inherit;
+    -webkit-text-stroke: 2px hotpink;
+    color:lightgray;
+    font-size: 22px;
+    padding: 0px;
+    margin-top: -10px;
+    cursor: pointer;
+}
+.likeButton:hover{
+    color:hotpink
+}
+.liked{
+    color:hotpink !important
+}
+.delete{
+    background-color: red !important;
+}
+.delete:hover{
+    background-color: darkred !important;
+}
+#likes{
+    margin-left: 745px;
+    margin-top: -5px;
+}
+#pubs{
+    margin-top: -64px;
+}
+#pubHead{
+    margin-bottom: 5px;
+}
+#date{
+    margin-left: 750px;
+    margin-top: -34px;
+}
+#genres{
+    margin-top: -13px;
+}
+#price{
+    display: inline-block;
+    margin:0px
+}
+#steamLink{
+    margin:0px;
+    padding-left: 660px;
+}
+li{
+    list-style-type: none;
+}
+textarea{
+    resize: none;
+}

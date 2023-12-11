@@ -1,0 +1,30 @@
+html
+    head
+        title register
+        script(src="./register.js")
+        -
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            } 
+            today = yyyy + '-' + mm + '-' + dd;
+    body(onload='init()')
+        include ../../partials/header
+        h4 Register
+        form(action="./register", method="post")
+            label Username #[br]
+                input#username(type="text", name="username", required, placeholder="Username")
+            label #[br] Password #[br]
+                input#password(type="password", name="password", required, placeholder="Password")
+                br
+            label Date
+                br
+                input#date(type="date", name="date", required, min="1900-01-01" max=today)
+                br
+            input#submit(type="submit", value="submit")

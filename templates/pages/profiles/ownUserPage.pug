@@ -1,0 +1,75 @@
+html 
+    head
+        title #{user.name}'s profile
+        link(rel="stylesheet", href="/users/profile.css")
+        link(rel="stylesheet", href="/users/profileTab.css")
+        script(src="/users/profile.js") 
+    body(onload=`init()`)
+        include ../../partials/header.pug
+        #info
+            h2 #{user.name}'s profile
+            p Publisher status: #{user.isPub}
+            button#followButton.button.pub(onclick="togglePub()") Toggle publisher
+            | 
+            a(href="/games/newGame") #[button#postGame.button.newGame(hidden) New Game]
+            | 
+            a(href="/workshops/newWorkshop") #[button#postWorkshop.button.newGame(hidden) New Workshop]
+            p Followers: #{user.followers.length}
+        // Tab links
+        .tab
+            button.tablinks(onclick="showData(event, 'games')") Games
+            button.tablinks(onclick="showData(event, 'likes')") Likes
+            button.tablinks(onclick="showData(event, 'reviews')") Reviews
+            button.tablinks(onclick="showData(event, 'workshops')") Workshops
+            button.tablinks(onclick="showData(event, 'enrolled')") Enrolled
+        // Tab content
+        #games.tabcontent 
+            if user.games
+                if user.games.length > 0
+                    ul
+                        for game in user.games
+                            li 
+                                a(href=`/games/${game.id}`) #[h4 #{game.name}]
+                else
+                    p No games
+            else
+                p No games
+        #likes.tabcontent
+            if user.likes.length > 0
+                ul
+                    for like in user.likes
+                        li 
+                            button#likeButton.likeButton(onclick=`removeLike('${like._id}')`)  ❤
+                            a(href=`/games/${like._id}`) #{like.name}
+            else 
+                p No likes
+        #reviews.tabcontent
+            if user.reviews.length > 0
+                ul
+                    for review in user.reviews  
+                        li 
+                            button#removeReview.button.delete(onclick=`removeReview("${review.game.id}", "${review.id}")`) Delete
+                            | 
+                            a(href=`/games/${review.game.id}`) #{review.game.name}
+                            br
+                            p #{review.rating}/10: #{review.text}
+            else 
+                p No reviews
+        #workshops.tabcontent
+            if user.workshops.length > 0
+                ul
+                    for workshop in user.workshops
+                        li
+                            a(href=`/workshops/${workshop.id}`) #{workshop.name}
+            else
+                p No workshops
+        #enrolled.tabcontent
+            if user.enrolled.length > 0
+                ul
+                    for workshop in user.enrolled
+                        li
+                            button#unenroll.button.delete(onclick=`unenroll("${workshop.id}")`) Unenroll
+                            | 
+                            a(href=`/workshops/${workshop.id}`) #{workshop.name}
+            else
+                p No workshops
