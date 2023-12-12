@@ -3,7 +3,7 @@ function init(){
 }
 
 function formSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
     var xhttp = new XMLHttpRequest();
     xhttp.open('POST', "newGame");
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -18,6 +18,6 @@ function formSubmit(event) {
     var game = {};
     new FormData(event.target).forEach((value, key) =>{
         game[key] = value;
-    });
+    })
     xhttp.send(JSON.stringify(game));
 }

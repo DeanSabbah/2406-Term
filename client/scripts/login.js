@@ -1,18 +1,12 @@
 function init(){
-    var submit = document.getElementById("submit");
-    submit.addEventListener("click", (event)=>{
-        event.preventDefault();
-        login();
-    });
+    document.getElementById("form").addEventListener("submit", login);
 }
 
-function login(){
+function login(event){
+    event.preventDefault();
     var xhttp = new XMLHttpRequest();
-    var name = document.getElementById("username").value;
-    var pass = document.getElementById("password").value;
     xhttp.open("POST", "./login");
     xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify({username:name,password:pass}));
     xhttp.onload = ()=>{
         if(xhttp.status == 401){
             alert("please check username or password");
@@ -28,4 +22,9 @@ function login(){
         }
         window.open(document.referrer, "_self");
     }
+    var user = {};
+    new FormData(event.target).forEach((value, key) =>{
+        user[key] = value;
+    });
+    xhttp.send(JSON.stringify(user));
 }
