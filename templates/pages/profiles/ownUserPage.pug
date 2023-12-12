@@ -15,9 +15,11 @@ html
             | 
             a(href="/workshops/newWorkshop") #[button#postWorkshop.button.newGame(hidden) New Workshop]
             p Followers: #{user.followers.length}
+        // Tab functionality and styles were taken from W3Schools Source:https://www.w3schools.com/howto/howto_js_tabs.asp
         // Tab links
         .tab
             button.tablinks(onclick="showData(event, 'games')") Games
+            button.tablinks(onclick="showData(event, 'following')") Following
             button.tablinks(onclick="showData(event, 'likes')") Likes
             button.tablinks(onclick="showData(event, 'reviews')") Reviews
             button.tablinks(onclick="showData(event, 'workshops')") Workshops
@@ -34,12 +36,23 @@ html
                     p No games
             else
                 p No games
+        #following.tabcontent 
+            if user.following.length > 0
+                ul 
+                    for follower in user.following
+                        li
+                            button#unfollowButton.button.follow(onclick=`unfollowOther('${follower.id}')`) Unfollow
+                            | 
+                            a(href=`/users/${follower.id}`) #{follower.name}
+            else 
+                p Not following anyone
         #likes.tabcontent
             if user.likes.length > 0
                 ul
                     for like in user.likes
                         li 
                             button#likeButton.likeButton(onclick=`removeLike('${like._id}')`)  ❤
+                            | 
                             a(href=`/games/${like._id}`) #{like.name}
             else 
                 p No likes
@@ -72,4 +85,4 @@ html
                             | 
                             a(href=`/workshops/${workshop.id}`) #{workshop.name}
             else
-                p No workshops
+                p Not enrroled in any workshops

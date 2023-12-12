@@ -97,6 +97,18 @@ function unfollow(){
     }
 }
 
+function unfollowOther(uid){
+    var xhttp = new XMLHttpRequest()
+    xhttp.open("DELETE", "follow");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({uid:uid}));
+    xhttp.onload = ()=>{
+        if(xhttp.status == 200){
+            location.reload();
+        }
+    }
+}
+
 async function togglePub(){
     if(await logInCheck()){
         var xhttp = new XMLHttpRequest();

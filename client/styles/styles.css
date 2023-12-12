@@ -12,6 +12,7 @@ body{
     border: none;
     cursor: pointer;
     transition: 0.3s;
+    text-align: center;
 }
 .button:hover {
     background-color: #2980B9;
@@ -36,6 +37,7 @@ body{
 .center{
     align-items: center;
 }
+/* badge styles were taken form W3School Source: https://www.w3schools.com/howto/howto_css_notification_button.asp */
 .badge {
     position: absolute;
     top: -8px;
@@ -52,6 +54,20 @@ body{
 .delete:hover{
     background-color: darkred !important;
 }
-#dropdown{
-    margin-left: 65%;
+#header{
+    width: 100%;
+}
+#right{
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    padding-right: 2%;
+    width: max-content;
+}
+#right.alt{
+    margin-top: -3px;
+}
+#left{
+    display: inline-block;
+    width: max-content;
 }

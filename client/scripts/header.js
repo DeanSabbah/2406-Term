@@ -39,7 +39,10 @@ window.onclick = function(event) {
 function showElms(){
     document.getElementById("myProfile").removeAttribute("hidden");
     document.getElementById("logout").removeAttribute("hidden");
-    document.getElementById("dropButton").removeAttribute("hidden")
+    document.getElementById("dropButton").removeAttribute("hidden");
+    document.getElementById("register").hidden = true;
+    document.getElementById("login").hidden = true;
+    document.getElementById("right").classList.add("alt")
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "/users/notificaiton");
     xhttp.send();

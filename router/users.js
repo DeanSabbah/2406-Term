@@ -70,13 +70,12 @@ router.route("/follow")
     });
 
 router.route("/notificaiton")
-    /* will update to only send necessary data if I have time 😪  */
     .get(async (req, res)=>{
         try {
             var user = await userModel.findById(req.session.uid)
                 .populate({path:"notifications", populate:{path:"doc"}})
                 .exec();
-            res.status(200).end(JSON.stringify(user));
+            res.status(200).end(JSON.stringify({notifications:user.notifications}));
         } catch (e) {
             console.error(e);
             res.status(500).end();
@@ -171,6 +170,7 @@ router.route("/:uid")
                 .populate("games")
                 .populate("workshops")
                 .populate("enrolled")
+                .populate("following")
                 .exec();
         }
         catch(e){
