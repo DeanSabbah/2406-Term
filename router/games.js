@@ -148,9 +148,8 @@ router.route("/:appid")
                     populate:{path:"user"}
                 })
                 .exec();
-            console.log(q.reviews);
-            if(q == null){
-                res.body = "Game not found";
+            console.log(q);
+            if(!q){
                 res.status(404).render("pages/error", {res:res});
                 res.end();
                 return;

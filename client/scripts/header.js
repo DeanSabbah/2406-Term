@@ -42,7 +42,7 @@ function showElms(){
     document.getElementById("dropButton").removeAttribute("hidden");
     document.getElementById("register").hidden = true;
     document.getElementById("login").hidden = true;
-    document.getElementById("right").classList.add("alt")
+    document.getElementById("right").classList.add("alt");
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "/users/notificaiton");
     xhttp.send();

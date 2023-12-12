@@ -1,10 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import { readFile } from "fs";
-import { ObjectId } from "mongodb";
 const db = await import("../db.js").then(module => module.default);
-import gameModel from "../models/gameModel.js";
-import userModel from "../models/userModel.js";
 
 const usersCollection = db.collection("users");
 const gamesCollection = db.collection("games");
