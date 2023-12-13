@@ -1,6 +1,6 @@
 import express from "express";
 import session from 'express-session';
-const db = await import("./db.js").then(module => module.default);
+await import("./db.js").then(module => module.default);
 import { readFile } from "fs";
 
 const app = express();
