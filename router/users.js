@@ -5,6 +5,7 @@ import gameModel from "../models/gameModel.js";
 import userModel from "../models/userModel.js";
 import notificationModel from "../models/notificationModel.js";
 
+//sends css for profile page
 router.get("/profile.css", (req, res)=>{
     readFile("./client/styles/profile.css", (err, data)=>{
         if(err){
@@ -15,6 +16,7 @@ router.get("/profile.css", (req, res)=>{
     });
 });
 
+//sends css for profile tabs. Tab functionality and styles were taken from W3Schools Source:https://www.w3schools.com/howto/howto_js_tabs.asp
 router.get("/profileTab.css", (req, res)=>{
     readFile("./client/styles/profileTab.css", (err, data)=>{
         if(err){
@@ -25,6 +27,7 @@ router.get("/profileTab.css", (req, res)=>{
     });
 });
 
+//sends script for profile page
 router.get("/profile.js", (req, res)=>{
     readFile("./client/scripts/profile.js", (err, data)=>{
         if(err){
@@ -35,17 +38,9 @@ router.get("/profile.js", (req, res)=>{
     });
 });
 
-router.get("/profile.css", (req, res)=>{
-    readFile("./client/styles/profile.css", (err, data)=>{
-        if(err){
-            res.status(500).end("Server error");
-            return;
-        }
-        res.status(200).end(data);
-    });
-});
-
+//router for following
 router.route("/follow")
+    //adds follower to followee and following to follower
     .put(async (req, res)=>{
         try{
             await userModel.findByIdAndUpdate(req.session.uid, {$push:{following:req.body.uid}}).exec();
@@ -57,6 +52,7 @@ router.route("/follow")
             res.status(500).end("server error");
         }
     })
+    //removes follower form followee and following from follower
     .delete(async (req, res)=>{
         try{
             await userModel.findByIdAndUpdate(req.session.uid, {$pull:{following:req.body.uid}}).exec();
@@ -69,7 +65,9 @@ router.route("/follow")
         }
     });
 
+//route for notifications
 router.route("/notificaiton")
+    //sends notifications to users
     .get(async (req, res)=>{
         try {
             var user = await userModel.findById(req.session.uid)
@@ -81,6 +79,7 @@ router.route("/notificaiton")
             res.status(500).end();
         }
     })
+    //removes notificaitons form users after they have been viewed
     .delete(async (req, res)=>{
         try {
             var user = await userModel.findById(req.session.uid).exec();
@@ -96,6 +95,7 @@ router.route("/notificaiton")
         }
     });
 
+//returns true if user is following page's owner
 router.put("/checkFollowing", async (req, res)=>{
     try{
         var user = await userModel.findById(req.session.uid)
@@ -115,6 +115,7 @@ router.put("/checkFollowing", async (req, res)=>{
     }
 });
 
+//returns true if user liked game
 router.put("/checkLiked", async (req, res)=>{
     try{
         var user = await userModel.findById(req.session.uid)
@@ -136,10 +137,10 @@ router.put("/checkLiked", async (req, res)=>{
     }
 });
 
+//returns true if game is user's
 router.put("/isOwn", async (req, res)=>{
     try{
-        var user = await userModel.findById(req.session.uid)
-            .exec();
+        var user = await userModel.findById(req.session.uid).exec();
         for(var item in user.games){
             if(user.games[item] == req.body.gid){
                 res.status(200).end('true');
@@ -154,13 +155,16 @@ router.put("/isOwn", async (req, res)=>{
     }
 });
 
+//displays user's page by user id
 router.route("/:uid")
     .get(async (req, res)=>{
         try {
+            //checks for my profile as param
             var id = req.params.uid;
             if(req.params.uid == "myProfile"){
                 id = req.session.uid;
             }
+            //finds user and populates the details to use in page rendering
             var user = await userModel.findById(id)
                 .populate("likes")
                 .populate({
@@ -186,7 +190,7 @@ router.route("/:uid")
                 res.end();
                 return;
             }
-            console.log(user);
+            //allows for JSON requests for users
             res.format({
                 html: ()=>{
                     if(req.session.uid != user._id){
@@ -197,6 +201,8 @@ router.route("/:uid")
                     }
                 },
                 json: ()=>{
+                    //obfuscates password before sending JSON
+                    user.password = "Wouldn't you want to know!";
                     res.json(user);
                 }
             });

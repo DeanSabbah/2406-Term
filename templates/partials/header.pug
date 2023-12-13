@@ -1,6 +1,7 @@
 link(rel="stylesheet", href="/dropdown.css")
 link(rel="stylesheet", href="/styles.css")
 #header()
+    script(src="/header.js", onload=("init_header()"))
     #left
         a.button.buttonLink(href="/") Home
         | 
@@ -9,6 +10,7 @@ link(rel="stylesheet", href="/styles.css")
         a.button.buttonLink(href="/search") Search
         |
     #right 
+        // Drop down tab styles and functionality were taken from W3School Source:  https://www.w3schools.com/howto/howto_css_dropdown.asp
         #dropdown.dropdown.hide
             button#dropButton.dropbtn(onclick='showNotification()', hidden) Notifications
             #notifications.dropdown-content
@@ -16,7 +18,6 @@ link(rel="stylesheet", href="/styles.css")
         | 
         a#login.button.buttonLink(href="/auth/login") Login
         | 
-        button#logout.button(type="button",onclick="logout()", hidden) logout
-        script(src="/header.js", onload=("init_header()"))
-        | 
         a#register.button.buttonLink(href="/auth/register") Register
+        | 
+        button#logout.button(type="button",onclick="logout()", hidden) logout

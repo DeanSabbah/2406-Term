@@ -34,7 +34,6 @@ html
                 ul 
                     for follower in user.following
                         li
-                            button#unfollowButton.button.follow(onclick=`unfollow('${follower.id}')`) Unfollow
                             a(href=`/users/${follower.id}`) #{follower.name}
             else 
                 p Not following anyone

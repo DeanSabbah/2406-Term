@@ -1,6 +1,6 @@
 var gameId;
 var userId;
-
+//saves the games ID and the publisher's ID to use in check, then calls those checks
 async function init(gid, uid){
     gameId = gid;
     userId = uid;
@@ -9,6 +9,7 @@ async function init(gid, uid){
         checkFollowing();
         isOwn();
     }
+    //if the user isn't logged in, all elements that require beinglogged in are hidden
     else{
         document.getElementById("followButton").disabled = true;
         document.getElementById("reviewText").disabled = true;
@@ -17,6 +18,7 @@ async function init(gid, uid){
     }
 }
 
+//checks if the user has liked the game, if true, the like button is changed and now links to the dislike funtion
 function checkLiked(){
     var xhttp = new XMLHttpRequest();
     xhttp.open("PUT", "/users/checkLiked");
@@ -30,6 +32,7 @@ function checkLiked(){
     }
 }
 
+//Checks if the user if following the publisher. If true, the follow button is changed and links to the unfollow function
 function checkFollowing(){
     var xhttp = new XMLHttpRequest();
     xhttp.open("PUT", "/users/checkFollowing");
@@ -43,6 +46,7 @@ function checkFollowing(){
     }
 }
 
+//checks if the game was published by the user. If true, all butons related to liking/leaving a review are disabled
 function isOwn(){
     var xhttp = new XMLHttpRequest();
     xhttp.open("PUT", "/users/isOwn");
@@ -60,6 +64,7 @@ function isOwn(){
     }
 }
 
+//Sends an HTTPRequest to follow the publisher
 function follow(){
     var xhttp = new XMLHttpRequest()
     xhttp.open("PUT", "/users/follow");
@@ -71,6 +76,8 @@ function follow(){
         }
     }
 }
+
+//Sends an HTTPRequest to unfollow the publisher
 function unfollow(){
     var xhttp = new XMLHttpRequest()
     xhttp.open("DELETE", "/users/follow");
@@ -82,6 +89,8 @@ function unfollow(){
         }
     }
 }
+
+//Sends an HTTPRequest to like the game
 async function addLike(){
     if(!await logInCheck()){
         alert("Please log in to like this game");
@@ -97,6 +106,8 @@ async function addLike(){
         }
     }
 }
+
+//Sends an HTTPRequest to unlike the game
 function removeLike(){
     var xhttp = new XMLHttpRequest()
     xhttp.open("DELETE", "like");
@@ -108,7 +119,7 @@ function removeLike(){
         }
     }
 }
-
+////Sends an HTTPRequest to post a review
 function postReview(){
     var rating = document.getElementById("rating").valueAsNumber;
     console.log(rating);

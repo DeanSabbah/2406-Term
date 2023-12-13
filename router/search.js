@@ -12,24 +12,31 @@ router.get("/", (req, res)=>{
     res.end();
 });
 
+//quries database for inputed parameters, then returns <= 10 results
 router.get("/query", async (req, res) => {
     try {
         var term = '"' + req.query.query.replace(/\s/g, '"\\ \\"') + '"';
         console.log(term);
+        //checks if the user wants to search for games or users
         var type = parseInt(req.query.type);
-        var publOnly = req.query.pubOnly === "true";
+        //checks if the user wants only publishers
+        var pubOnly = req.query.pubOnly === "true";
         var start = 0;
+        //for pagination
         if (req.query.startPos) {
             start = parseInt(req.query.startPos);
         }
+        //games search
         if (!type) {
             var query = await gamesCollection.find({ $text: { $search: term } })
                 .limit(max)
                 .skip(start)
                 .toArray();
             res.json(query);
-        } else {
-            if (publOnly) {
+        } 
+        //user seach
+        else {
+            if (pubOnly) {
                 var query = await usersCollection.find({ $text: { $search: term }, isPub: true })
                     .limit(max)
                     .skip(start)
@@ -40,7 +47,6 @@ router.get("/query", async (req, res) => {
                     .skip(start)
                     .toArray();
             }
-            console.log(query);
             res.json(query);
         }
         res.status(200).end();
@@ -50,6 +56,7 @@ router.get("/query", async (req, res) => {
     }
 });
 
+//sends script for search form
 router.get("/search.js", (req, res)=>{
     readFile("./client/scripts/search.js", (err, data)=>{
         if(err){
@@ -60,6 +67,7 @@ router.get("/search.js", (req, res)=>{
     });
 });
 
+//sends css for search form
 router.get("/search.css", (req, res)=>{
     readFile("./client/styles/search.css", (err, data)=>{
         if(err){

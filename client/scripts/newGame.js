@@ -1,7 +1,9 @@
+//adds event listener to the new game form
 function init(){
     document.getElementById("newGameForm").addEventListener("submit", formSubmit);
 }
 
+//sends HTTPRequest to post the new game to the server. If successful, the user is redirected to the new game's page
 function formSubmit(event) {
     event.preventDefault();
     var xhttp = new XMLHttpRequest();

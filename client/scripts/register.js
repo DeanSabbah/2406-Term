@@ -1,7 +1,9 @@
+//adds event listener to the register form
 function init(){
     document.getElementById("form").addEventListener("submit", register);
 }
 
+//Sends HTTPRequest to register a new user. If successful, the user is logged in and returned to their previous page
 function register(event){
     event.preventDefault();
     var xhttp = new XMLHttpRequest();

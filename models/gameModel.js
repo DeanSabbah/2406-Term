@@ -16,6 +16,7 @@ const gameSchema = mongoose.Schema({
 	likes:Number
 });
 
+//Add the name, genre, publisher and tags properties to a text index, making quering for them much easier
 gameSchema.index({name:'text', genre:"text", publisher:"text", tags:"text"})
 
 const gameModel = mongoose.model("Game", gameSchema, "games");

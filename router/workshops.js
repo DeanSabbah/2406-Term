@@ -9,11 +9,23 @@ router.use((req, res, next)=>{
     next();
 });
 
+//double checking if user is a publisher
 async function checkPub(req, res){
-    var user = await userModel.findById(req.session.uid).exec();
-    return user.isPub;
+    if(!req.session.loggedin || !req.session.uid){
+        res.status(401).end("Not logged in");
+        return;
+    }
+    try{
+        var user = await userModel.findById(req.session.uid).exec();
+        return user.isPub;
+    }
+    catch(e){
+        console.error(e);
+        res.status(500).end();
+    }
 }
 
+//sends script for new workshop form
 router.get("/newWorkshop.js", (req, res)=>{
     readFile("./client/scripts/newWorkshop.js", (err, data)=>{
         if(err){
@@ -24,6 +36,7 @@ router.get("/newWorkshop.js", (req, res)=>{
     });
 });
 
+//sends script for wrokshop page
 router.get("/workshop.js", (req, res)=>{
     readFile("./client/scripts/workshop.js", (err, data)=>{
         if(err){
@@ -34,6 +47,7 @@ router.get("/workshop.js", (req, res)=>{
     });
 });
 
+//sends css for workshop page
 router.get("/workshop.css", (req, res)=>{
     readFile("./client/styles/workshop.css", (err, data)=>{
         if(err){
@@ -44,6 +58,7 @@ router.get("/workshop.css", (req, res)=>{
     });
 });
 
+//returns true if workshop is user's
 router.put("/isOwn", async (req, res)=>{
     try{
         var user = await userModel.findById(req.session.uid).exec();
@@ -61,6 +76,7 @@ router.put("/isOwn", async (req, res)=>{
     }
 });
 
+//returns true if user is enrolled
 router.put("/checkEnrolled", async (req, res)=>{
     try{
         var user = await userModel.findById(req.session.uid)
@@ -80,7 +96,9 @@ router.put("/checkEnrolled", async (req, res)=>{
     }
 });
 
+//route for enrolling
 router.route("/enroll")
+    //enrolls user into workshop
     .put(async (req, res)=>{
         try {
             await userModel.findByIdAndUpdate(req.session.uid, {$push:{enrolled:req.body.wid}}).exec();
@@ -91,6 +109,7 @@ router.route("/enroll")
             res.status(500).end();
         }
     })
+    //unerolls user from workshop
     .delete(async (req, res)=>{
         try {
             await userModel.findByIdAndUpdate(req.session.uid, {$pull:{enrolled:req.body.wid}}).exec();
@@ -102,7 +121,9 @@ router.route("/enroll")
         }
     });
 
+//route for new workshop
 router.route("/newWorkshop")
+    //sends form for new workshop
     .get(async (req, res)=>{
         if(!await checkPub(req, res)){
             res.status(401).end("Must be publisher");
@@ -111,6 +132,7 @@ router.route("/newWorkshop")
         res.render("pages/workshops/newWorkshop");
         res.status(200).end();
     })
+    //post new workshop to database
     .post(async (req, res) => {
         try {
             var user = await userModel.findById(req.session.uid).exec();
@@ -120,7 +142,7 @@ router.route("/newWorkshop")
             }
             var nameCheck = await workshopModel.findOne({name:req.body.name}).exec();
             if(nameCheck){
-                res.status(409).end("Game already exists");
+                res.status(409).end("Workshop already exists");
                 return;
             }
             var workshop = await workshopModel.create({ name: req.body.name, publisher: [user.name], publisher_id: [req.session.uid], desc: req.body.desc,date: req.body.date});
@@ -137,7 +159,9 @@ router.route("/newWorkshop")
         }
     })
 
+//route for workshops
 router.route("/:wid")
+    //renders workshop page
     .get(async (req, res)=>{
         try{
             var workshop = await workshopModel.findById(req.params.wid)
@@ -156,6 +180,6 @@ router.route("/:wid")
             console.error(e);
             res.status(500).end;
         }
-    })
+    });
 
 export default router;

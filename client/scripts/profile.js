@@ -1,10 +1,13 @@
 var userId;
 
+//saves the user's ID to use in check, then calls those checks 
 async function init(uid){
     showData(event, "games");
     userId = uid;
+    //checks if user is logged in, if not then the follow button is disabled
     if(await logInCheck()){
         checkFollowing();
+        //if the user is a publisher, publisher only elements are displayed
         if(await pubCheck()){
             document.getElementById("postGame").hidden = false;
             document.getElementById("postWorkshop").hidden = false;
@@ -15,7 +18,7 @@ async function init(uid){
     }
 }
 
-
+//Show data for tab that was clicked. Tab functionality and styles were taken from W3Schools Source:https://www.w3schools.com/howto/howto_js_tabs.asp
 function showData(evt, dataType) {
     // Declare all variables
     var i, tabcontent, tablinks;
@@ -37,6 +40,7 @@ function showData(evt, dataType) {
     evt.currentTarget.className += " active";
 }
 
+//Sends HTTPRequest to delete like on selected game
 function removeLike(gameId){
     var xhttp = new XMLHttpRequest()
     xhttp.open("DELETE", "/games/like");
@@ -49,6 +53,7 @@ function removeLike(gameId){
     }
 }
 
+//Sends HTTPRequest to delete review on selected game
 function removeReview(gameId, revId){
     var xhttp = new XMLHttpRequest()
     xhttp.open("DELETE", "/games/review");
@@ -61,6 +66,7 @@ function removeReview(gameId, revId){
     }
 }
 
+//checks if the user is following the page's owner. If true, the follow button is changed to a following button and links to unfollow function
 function checkFollowing(){
     var xhttp = new XMLHttpRequest();
     xhttp.open("PUT", "/users/checkFollowing");
@@ -74,6 +80,7 @@ function checkFollowing(){
     }
 }
 
+//Sends HTTPRequest to follow page's owner
 function follow(){
     var xhttp = new XMLHttpRequest()
     xhttp.open("PUT", "follow");
@@ -85,6 +92,8 @@ function follow(){
         }
     }
 }
+
+//Sends HTTPRequest to unfollow page's owner
 function unfollow(){
     var xhttp = new XMLHttpRequest()
     xhttp.open("DELETE", "follow");
@@ -97,6 +106,7 @@ function unfollow(){
     }
 }
 
+//Sends HTTPRequest to unfollow selected user
 function unfollowOther(uid){
     var xhttp = new XMLHttpRequest()
     xhttp.open("DELETE", "follow");
@@ -109,6 +119,7 @@ function unfollowOther(uid){
     }
 }
 
+//Sends HTTPRequest to change the user's publisher status
 async function togglePub(){
     if(await logInCheck()){
         var xhttp = new XMLHttpRequest();
@@ -122,6 +133,7 @@ async function togglePub(){
     }
 }
 
+//Sends HTTP request to enroll in selected workshop
 function unenroll(wid){
     var xhttp = new XMLHttpRequest()
     xhttp.open("DELETE", "/workshops/enroll");

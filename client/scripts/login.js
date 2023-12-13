@@ -1,7 +1,9 @@
+//adds event listener to the login form
 function init(){
     document.getElementById("form").addEventListener("submit", login);
 }
 
+//sends HTTPRequest to log the user in, then sends the user back to the previous page
 function login(event){
     event.preventDefault();
     var xhttp = new XMLHttpRequest();

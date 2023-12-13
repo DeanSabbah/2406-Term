@@ -1,7 +1,9 @@
+//adds event listener to the new workshop form
 function init(){
     document.getElementById("form").addEventListener("submit", formSubmit);
 }
 
+//sends an HTTPRequest to post a new workshop. If successful, the user is redirected to the new workshop's page
 function formSubmit(event) {
     event.preventDefault();
     var xhttp = new XMLHttpRequest();

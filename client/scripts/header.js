@@ -1,9 +1,11 @@
+//Checks if the user is logged. If true, calls the showElms function
 async function init_header(){
     if(await logInCheck()){
         showElms()
     }
 }
 
+//Sends and HTTPRequest to log the user out
 function logout(){
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "/auth/logout");
@@ -15,6 +17,8 @@ function logout(){
         }
     }
 }
+
+//displayes the notification tray, then sends an XHTTP request to delete the notifications. Drop down tab styles and functionality were taken from W3School Source:  https://www.w3schools.com/howto/howto_js_dropdown.asp
 function showNotification() {
     document.getElementById("notifications").classList.toggle("show");
     var xhttp = new XMLHttpRequest();
@@ -22,7 +26,7 @@ function showNotification() {
     xhttp.send();
 }
 
-// Close the dropdown menu if the user clicks outside of it
+// Close the dropdown menu if the user clicks outside of it. Drop down tab styles and functionality were taken from W3School Source:  https://www.w3schools.com/howto/howto_js_dropdown.asp
 window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -36,6 +40,7 @@ window.onclick = function(event) {
     }
 }
 
+//Displays elements that are only availiable to users and populates the notificaiton tray if there are new notificaitons.
 function showElms(){
     document.getElementById("myProfile").removeAttribute("hidden");
     document.getElementById("logout").removeAttribute("hidden");
@@ -71,6 +76,7 @@ function showElms(){
     }
 }
 
+//Sends HTTPRequest to check if the user is logged in (availiable to all other client side js scripts because all other pages have a header)
 async function logInCheck(){
     return new Promise((resolve, reject)=>{
         var xhttp = new XMLHttpRequest();
@@ -85,6 +91,7 @@ async function logInCheck(){
     })
 }
 
+//Sends HTTPRequest to check if the user is a publisher (availiable to all other client side js scripts because all other pages have a header)
 async function pubCheck(){
     return new Promise((resolve, reject)=>{
         var xhttp = new XMLHttpRequest();
