@@ -178,8 +178,8 @@ router.route("/:uid")
                 .exec();
         }
         catch(e){
-            res.body = "Bad request";
-            res.status(400).render("pages/error",{res:res})
+            res.body = "User not found";
+            res.status(404).render("pages/error",{res:res})
             res.end();
             return;
         }

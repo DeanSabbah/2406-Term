@@ -16,7 +16,6 @@ router.get("/", (req, res)=>{
 router.get("/query", async (req, res) => {
     try {
         var term = '"' + req.query.query.replace(/\s/g, '"\\ \\"') + '"';
-        console.log(term);
         //checks if the user wants to search for games or users
         var type = parseInt(req.query.type);
         //checks if the user wants only publishers

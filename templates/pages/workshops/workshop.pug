@@ -7,7 +7,7 @@ html
         include ../../partials/header
         #info.col.left
             h1 #{data.name}
-            h3 By #{data.publisher[0]}
+            a(href=`/users/${data.publisher_id[0]}`) #[h3 By #{data.publisher[0]}]
             p Workshop date: #{data.date.getUTCDate()}-#{data.date.getUTCMonth() + 1}-#{data.date.getUTCFullYear()}
             button#enroll.button.enroll(onclick="enroll()") Enroll
             p#desc #{data.desc}
@@ -15,3 +15,4 @@ html
             h3 Enrolled users:
             for user in data.enrolled
                 a(href=`/users/${user._id}`) #{user.name}
+                br

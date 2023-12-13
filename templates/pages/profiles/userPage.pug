@@ -60,6 +60,8 @@ html
                 ul
                     for workshop in user.workshops
                         li
+                            button#enroll.button.follow(onclick=`enroll('${workshop.id}')`) Enroll
+                            | 
                             a(href=`/workshops/${workshop.id}`) #{workshop.name}
             else
                 p No workshops

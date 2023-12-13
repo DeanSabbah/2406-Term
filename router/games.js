@@ -10,22 +10,6 @@ router.use((req, res, next)=>{
     next();
 });
 
-//double checking if user is a publisher
-async function checkPub(req, res){
-    if(!req.session.loggedin || !req.session.uid){
-        res.status(401).end("Not logged in");
-        return;
-    }
-    try{
-        var user = await userModel.findById(req.session.uid).exec();
-        return user.isPub;
-    }
-    catch(e){
-        console.error(e);
-        res.status(500).end();
-    }
-}
-
 //sends game page js script
 router.get("/gameId.js", (req, res)=>{
     readFile("./client/scripts/gameId.js", (err, data)=>{
@@ -121,10 +105,6 @@ router.route("/review")
 router.route("/newGame")
     //shows new game form
     .get(async (req, res)=>{
-        if(!await checkPub(req, res)){
-            res.status(401).end("Must be publisher");
-            return;
-        }
         res.render("pages/games/newGame");
         res.status(200).end();
     })
@@ -135,9 +115,9 @@ router.route("/newGame")
             var tags = req.body.tags.split(", ");
             var user = await userModel.findById(req.session.uid).exec();
             if(!user.isPub){
-                res.status(401).end("not publisher");
-                return;
+                user.isPub = true;
             }
+            user.save();
             var nameCheck = await gameModel.findOne({name:req.body.name}).exec();
             if(nameCheck){
                 res.status(409).end("Game already exists");
@@ -174,7 +154,15 @@ router.route("/:appid")
                     populate:{path:"user"}
                 })
                 .exec();
-            console.log(q);
+            }
+        catch(e){
+            console.error(e);
+            res.body = "Game not found";
+            res.status(404).render("pages/error",{res:res});
+            res.end()
+            return;
+        }
+        try{
             if(!q){
                 res.status(404).render("pages/error", {res:res});
                 res.end();

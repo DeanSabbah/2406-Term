@@ -73,6 +73,10 @@ async function login(req, res, next){
 async function togglePub(req, res, next){
     try{
         var user = await userModel.findById(req.session.uid).exec();
+        if(user.games.length < 1){
+            res.status(200).end("newPub");
+            return;
+        }
         user.isPub = !user.isPub;
         user.save();
         res.status(200).end()

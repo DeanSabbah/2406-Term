@@ -121,26 +121,30 @@ function unfollowOther(uid){
 
 //Sends HTTPRequest to change the user's publisher status
 async function togglePub(){
-    if(await logInCheck()){
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("PUT", "/auth/togglePub");
-        xhttp.send();
-        xhttp.onload = ()=>{
-            if(xhttp.status == 200){
-                location.reload();
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("PUT", "/auth/togglePub");
+    xhttp.send();
+    xhttp.onload = ()=>{
+        if(xhttp.status == 200){
+            console.log(xhttp.responseText);
+            if(xhttp.responseText == "newPub"){
+                window.open("/games/NewGame", "_self");
+                return;
             }
+            location.reload();
         }
     }
 }
 
 //Sends HTTP request to enroll in selected workshop
-function unenroll(wid){
+function enroll(wid){
     var xhttp = new XMLHttpRequest()
-    xhttp.open("DELETE", "/workshops/enroll");
+    xhttp.open("PUT", "/workshops/enroll");
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify({wid:wid}));
     xhttp.onload = ()=>{
         if(xhttp.status == 200){
+            alert("Enrollment successful!");
             location.reload();
         }
     }

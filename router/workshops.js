@@ -101,7 +101,13 @@ router.route("/enroll")
     //enrolls user into workshop
     .put(async (req, res)=>{
         try {
-            await userModel.findByIdAndUpdate(req.session.uid, {$push:{enrolled:req.body.wid}}).exec();
+            var user = await userModel.findById(req.session.uid).exec();
+            if(user.enrolled.includes(req.body.wid)){
+                res.status(400).end("Already enrolled");
+                return;
+            }
+            user.enrolled[user.enrolled.length] = req.body.wid;
+            await user.save();
             await workshopModel.findByIdAndUpdate(req.body.wid, {$push:{enrolled:req.session.uid}}).exec();
             res.status(200).end()
         } catch (error) {
@@ -167,6 +173,14 @@ router.route("/:wid")
             var workshop = await workshopModel.findById(req.params.wid)
                 .populate("enrolled")
                 .exec();
+        }
+        catch(e){
+            res.body = "Workshop not found";
+            res.status(404).render("pages/error", {res:res});
+            res.end("Workshop not found")
+            return;
+        }
+        try{
             if(!workshop){
                 res.body = "Workshop not found";
                 res.status(404).render("pages/error", {res:res});
