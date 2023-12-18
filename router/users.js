@@ -83,9 +83,6 @@ router.route("/notificaiton")
     .delete(async (req, res)=>{
         try {
             var user = await userModel.findById(req.session.uid).exec();
-            for(var i in user.notifications){
-                await notificationModel.deleteOne(user.notifications[i]);
-            }
             user.notifications = [];
             await user.save();
             res.status(200).end();
@@ -201,8 +198,17 @@ router.route("/:uid")
                     }
                 },
                 json: ()=>{
-                    //obfuscates password before sending JSON
+                    //obfuscates data before sending JSON
                     user.password = "Wouldn't you want to know!";
+                    for(var game in user.likes){
+                        user.likes[game] = user.likes[game].id;
+                    }
+                    for(var game in user.games){
+                        user.games[game] = user.games[game].id;
+                    }
+                    for(var profile in user.following){
+                        user.following[profile] = user.following[profile].id;
+                    }
                     res.json(user);
                 }
             });

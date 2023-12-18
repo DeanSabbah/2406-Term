@@ -77,7 +77,7 @@ async function run() {
             console.log("Reviews collection has been dropped.")
         }
 
-        const notificaitonCollection = database.collection("notofications")
+        const notificaitonCollection = database.collection("notifications")
         var result1_n = await notificaitonCollection.drop();
 
         if (result1_n) {

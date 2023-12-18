@@ -114,7 +114,7 @@ async function register(req, res, next){
                 res.status(500).end();
                 throw err;
             });
-        login(req, res)
+        login(req, res);
         //res.status(200).end("UserCreated");
     } catch (e) {
         res.status(500).end("Server error");

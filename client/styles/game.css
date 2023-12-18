@@ -23,12 +23,16 @@
     padding: 0px;
     margin-top: -10px;
     cursor: pointer;
+    transition: 0.1s;
 }
 .likeButton:hover{
     color:hotpink
 }
 .liked{
     color:hotpink !important
+}
+.likeButton:disabled{
+    color: lightgray !important;
 }
 .delete{
     background-color: red !important;
@@ -66,4 +70,7 @@ li{
 }
 textarea{
     resize: none;
+}
+img{
+    padding-right: 50px;
 }

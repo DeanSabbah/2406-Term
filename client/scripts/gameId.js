@@ -15,6 +15,8 @@ async function init(gid, uid){
         document.getElementById("reviewText").disabled = true;
         document.getElementById("reviewText").setAttribute("placeholder", "Log in to post a comment");
         document.getElementById("reviewSubmit").disabled = true;
+        document.getElementById("rating").disabled = true;
+        document.getElementById("likeButton").disabled = true;
     }
 }
 
@@ -60,6 +62,7 @@ function isOwn(){
             document.getElementById("reviewText").disabled = true;
             document.getElementById("reviewText").setAttribute("placeholder", "Cannot review own game");
             document.getElementById("reviewSubmit").disabled = true;
+            document.getElementById("rating").disabled = true;
         }
     }
 }

@@ -21,6 +21,12 @@ body{
 .button:hover {
     background-color: #2980B9;
 }
+:disabled {
+    cursor: not-allowed;
+}
+.button:disabled {
+    background-color: #3498DB !important;
+}
 .buttonLink{
     padding-left: 24px;
     padding-right: 24px;
