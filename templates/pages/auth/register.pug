@@ -17,7 +17,7 @@ html
     body(onload='init()')
         include ../../partials/header
         h4 Register
-        form(action="./register", method="post")
+        form#form(action="./register", method="post")
             label Username #[br]
                 input#username(type="text", name="username", required, placeholder="Username")
             label #[br] Password #[br]
@@ -25,6 +25,7 @@ html
                 br
             label Date
                 br
-                input#date(type="date", name="date", required, min="1900-01-01" max=today)
+                input#date(type="date", name="dob", required, min="1900-01-01" max=today)
                 br
-            input#submit(type="submit", value="submit")
+            br
+            button.button#submit(type="submit", value="submit") Submit

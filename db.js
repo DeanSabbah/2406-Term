@@ -1,5 +1,5 @@
+//connects to database. Allows for connection to be used in routers.
 import mongoose from "mongoose";
-mongoose.Promise = global.Promise;
 
 await mongoose.connect("mongodb://127.0.0.1:27017/term");
 console.log("connected to db")

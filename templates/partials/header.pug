@@ -1,20 +1,23 @@
 link(rel="stylesheet", href="/dropdown.css")
 link(rel="stylesheet", href="/styles.css")
 #header()
-    a.button.buttonLink(href="/") Home
-    | 
-    a.button.buttonLink#myProfile(href="/users/myProfile", hidden) My profile
-    | 
-    a.button.buttonLink(href="/search") Search
-    | 
-    #dropdown.dropdown.hide
-        button#dropButton.dropbtn(onclick='showNotification()', hidden) Notifications
-        #notifications.dropdown-content
-            a No notifications
-    | 
-    a#login.button.buttonLink(href="/auth/login") Login
-    | 
-    button#logout.button(type="button",onclick="logout()", hidden) logout
     script(src="/header.js", onload=("init_header()"))
-    | 
-    a.button.buttonLink(href="/auth/register") Register
+    #left
+        a.button.buttonLink(href="/") Home
+        | 
+        a.button.buttonLink#myProfile(href="/users/myProfile", hidden) My profile
+        | 
+        a.button.buttonLink(href="/search") Search
+        |
+    #right 
+        // Drop down tab styles and functionality were taken from W3School Source:  https://www.w3schools.com/howto/howto_css_dropdown.asp
+        #dropdown.dropdown.hide
+            button#dropButton.dropbtn(onclick='showNotification()', hidden) Notifications
+            #notifications.dropdown-content
+                a No notifications
+        | 
+        a#login.button.buttonLink(href="/auth/login") Login
+        | 
+        a#register.button.buttonLink(href="/auth/register") Register
+        | 
+        button#logout.button(type="button",onclick="logout()", hidden) logout

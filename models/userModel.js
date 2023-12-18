@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema({
 	enrolled: [{type:Schema.Types.ObjectId, ref:"Workshop"}]
 });
 
+//add the name property to a text index making queries for them much easier
 userSchema.index({name:"text"});
 
 const userModel = mongoose.model("User", userSchema, "users");

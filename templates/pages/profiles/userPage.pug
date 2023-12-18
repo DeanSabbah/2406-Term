@@ -12,6 +12,7 @@ html
         // Tab links
         .tab
             button.tablinks(onclick="showData(event, 'games')") Games
+            button.tablinks(onclick="showData(event, 'following')") Following
             button.tablinks(onclick="showData(event, 'likes')") Likes
             button.tablinks(onclick="showData(event, 'reviews')") Reviews
             button.tablinks(onclick="showData(event, 'workshops')") Workshops
@@ -28,6 +29,14 @@ html
                     p No games
             else 
                 p No games
+        #following.tabcontent 
+            if user.following.length > 0
+                ul 
+                    for follower in user.following
+                        li
+                            a(href=`/users/${follower.id}`) #{follower.name}
+            else 
+                p Not following anyone
         #likes.tabcontent
             ul
                 if user.likes.length > 0
@@ -51,6 +60,8 @@ html
                 ul
                     for workshop in user.workshops
                         li
+                            button#enroll.button.follow(onclick=`enroll('${workshop.id}')`) Enroll
+                            | 
                             a(href=`/workshops/${workshop.id}`) #{workshop.name}
             else
                 p No workshops
@@ -61,4 +72,4 @@ html
                         li
                             a(href=`/workshops/${workshop.id}`) #{workshop.name}
             else
-                p No workshops
+                p Not enrroled in any workshops

@@ -1,9 +1,11 @@
+//adds event listener to the new workshop form
 function init(){
     document.getElementById("form").addEventListener("submit", formSubmit);
 }
 
+//sends an HTTPRequest to post a new workshop. If successful, the user is redirected to the new workshop's page
 function formSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
     var xhttp = new XMLHttpRequest();
     xhttp.open('POST', "newWorkshop");
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -14,10 +16,10 @@ function formSubmit(event) {
         else{
             alert(xhttp.responseText);
         }
-    };
-    var game = {};
+    }
+    var workshop = {};
     new FormData(event.target).forEach((value, key) =>{
-        game[key] = value;
+        workshop[key] = value;
     });
-    xhttp.send(JSON.stringify(game));
+    xhttp.send(JSON.stringify(workshop));
 }

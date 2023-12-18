@@ -13,9 +13,10 @@ const gameSchema = mongoose.Schema({
 	tags:{type:[String], required:true},
 	release_date:{type:Date},
 	reviews:[{type:Schema.Types.ObjectId, ref:"Review"}],
-	likes:Number
+	likes:{type:Number, default: 0}
 });
 
+//Add the name, genre, publisher and tags properties to a text index, making quering for them much easier
 gameSchema.index({name:'text', genre:"text", publisher:"text", tags:"text"})
 
 const gameModel = mongoose.model("Game", gameSchema, "games");

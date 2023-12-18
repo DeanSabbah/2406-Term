@@ -1,5 +1,6 @@
 import express from "express";
 import session from 'express-session';
+await import("./db.js").then(module => module.default);
 import { readFile } from "fs";
 
 const app = express();
@@ -18,6 +19,7 @@ app.set("views", "templates");
 //adds default parsing capabilities
 app.use(express.json());
 
+//Creates session token for user
 app.use(session({
 	secret: secret,
 	resave: false,
@@ -36,12 +38,14 @@ app.use(function(req,res,next){
 	next();
 });
 
+//assigns routes to routers
 app.use("/games", gameRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/search", searchRouter);
 app.use("/workshops", workshopRouter);
 
+//renders welcome page
 app.get("/",(req, res)=>{
     //renders the landing/welcome/index page
     readFile("templates/pages/index.pug", (err, data)=>{
@@ -54,8 +58,8 @@ app.get("/",(req, res)=>{
     });
 });
 
+//sends scripts for header
 app.get("/header.js", (req, res)=>{
-    //sends js file for the header
 	readFile("client/scripts/header.js", (err, data)=>{
 		if(err){
             res.status(500).end();
@@ -65,6 +69,7 @@ app.get("/header.js", (req, res)=>{
 	});
 });
 
+//sends css for dropdown. Drop down tab styles and functionality were taken from W3School Source:  https://www.w3schools.com/howto/howto_js_dropdown.asp
 app.get("/dropdown.css", (req, res)=>{
     //sends js file for the header
 	readFile("client/styles/dropdown.css", (err, data)=>{
@@ -76,8 +81,8 @@ app.get("/dropdown.css", (req, res)=>{
 	});
 });
 
+//sends css for the header (and base css for the entire site)
 app.get("/styles.css", (req, res)=>{
-    //sends js file for the header
 	readFile("client/styles/styles.css", (err, data)=>{
 		if(err){
             res.status(500).end();
@@ -87,12 +92,12 @@ app.get("/styles.css", (req, res)=>{
 	});
 });
 
+//404 bad URL handling
 app.use((req, res)=>{
     res.body = "Resource not found";
     res.status(404).render("pages/error", {res:res});
     res.end();
 });
 
-	
 app.listen(3000);
 console.log("Server running on Port 3000");

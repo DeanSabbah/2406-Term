@@ -7,18 +7,30 @@ router.use((req, res, next)=>{
     next();
 });
 
+//returns true if the user is a publisher (and logged in)
 async function checkPub(req, res){
-    var user = await userModel.findById(req.session.uid).exec();
-    return user.isPub;
+    if(!req.session.loggedin || !req.session.uid){
+        res.status(401).end("Not logged in");
+    }
+    try{
+        var user = await userModel.findById(req.session.uid).exec();
+        return user.isPub;
+    }
+    catch(e){
+        console.error(e);
+        res.status(500).end();
+    }
 }
 
+//returns true if the user is logged in
 function checkLogin(req, res){
-    if(!req.session.loggedin){
+    if(!req.session.loggedin || !req.session.uid){
         return false;
     }
     return true;
 }
 
+//logs the user out
 function logout(req, res, next) {
 	if (req.session.loggedin) {
 		req.session.loggedin = false;
@@ -29,6 +41,7 @@ function logout(req, res, next) {
 	res.status(200).send("Logged out.");
 }
 
+//logs the user in, if the profile exists and passwords match
 async function login(req, res, next){
     try {
         if (req.session.loggedin) {
@@ -56,9 +69,14 @@ async function login(req, res, next){
     }
 }
 
+//changes the user's publisher status
 async function togglePub(req, res, next){
     try{
         var user = await userModel.findById(req.session.uid).exec();
+        if(user.games.length < 1){
+            res.status(200).end("newPub");
+            return;
+        }
         user.isPub = !user.isPub;
         user.save();
         res.status(200).end()
@@ -69,6 +87,7 @@ async function togglePub(req, res, next){
     }
 }
 
+//registers a new profile if the username is unique and all properties are filled
 async function register(req, res, next){
     try {
         if (req.session.loggedin) {
@@ -95,7 +114,7 @@ async function register(req, res, next){
                 res.status(500).end();
                 throw err;
             });
-        login(req, res)
+        login(req, res);
         //res.status(200).end("UserCreated");
     } catch (e) {
         res.status(500).end("Server error");
@@ -103,8 +122,10 @@ async function register(req, res, next){
     }
 }
 
+//route for toggling publisher
 router.put("/togglePub", (togglePub));
 
+//route for log in check
 router.get("/checkLogin", (req, res)=>{
     if(!checkLogin(req, res)){
         res.status(200).end('false')
@@ -113,6 +134,7 @@ router.get("/checkLogin", (req, res)=>{
     res.status(200).end('true');
 });
 
+//route for publisher check
 router.get("/checkPub",async (req, res)=>{
     if(!await checkPub(req, res)){
         res.status(200).end('false')
@@ -121,7 +143,9 @@ router.get("/checkPub",async (req, res)=>{
     res.status(200).end('true');
 });
 
+//route for registration
 router.route("/register")
+    //displays register form
     .get((req, res)=>{
         //sends the register page
         readFile("templates/pages/auth/register.pug", function(err, data){
@@ -135,6 +159,7 @@ router.route("/register")
     })
     .post(register);
 
+//route for logging in
 router.route("/login")
     .get((req, res)=>{
         //sends the login page
@@ -149,8 +174,10 @@ router.route("/login")
     })
     .post(login);
 
-router.get("/logout", (logout));
+//route for logging out
+    router.get("/logout", (logout));
 
+//sends login form's js script
 router.get("/login.js", (req, res)=>{
     readFile("./client/scripts/login.js", (err, data)=>{
         if(err){
@@ -161,6 +188,7 @@ router.get("/login.js", (req, res)=>{
     });
 });
 
+//sends register form's js script
 router.get("/register.js", (req, res)=>{
     readFile("./client/scripts/register.js", (err, data)=>{
         if(err){

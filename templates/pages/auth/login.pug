@@ -5,10 +5,11 @@ html
     body(onload='init()')
         include ../../partials/header
         h4 Log in
-        form(action="./login", method="post")
+        form#form(action="./login", method="post")
             label Username #[br]
                 input#username(type="text", name="username", required, placeholder="Username")
             label #[br] password #[br]
                 input#password(type="password", name="password", required, placeholder="Password")
                 br
-            input#submit(type="submit", value="submit")
+            br
+            button.button#submit(type="submit", value="submit") Submit
