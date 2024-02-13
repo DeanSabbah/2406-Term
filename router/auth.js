@@ -3,10 +3,6 @@ const router = Router();
 import { readFile } from "fs";
 import userModel from "../models/userModel.js";
 
-router.use((req, res, next)=>{
-    next();
-});
-
 //returns true if the user is a publisher (and logged in)
 async function checkPub(req, res){
     if(!req.session.loggedin || !req.session.uid){

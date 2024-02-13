@@ -6,10 +6,6 @@ import userModel from "../models/userModel.js";
 import reviewModel from "../models/reviewModel.js";
 import notificationModel from "../models/notificationModel.js";
 
-router.use((req, res, next)=>{
-    next();
-});
-
 //sends game page js script
 router.get("/gameId.js", (req, res)=>{
     readFile("./client/scripts/gameId.js", (err, data)=>{
@@ -131,7 +127,7 @@ router.route("/newGame")
                 var newGame = await gameModel.create({ appid: req.body.appid, publisher: [user.name], name: req.body.name, publisher_id: [req.session.uid], price: req.body.price*100, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
             }
             //sends notificaitons to all users following the publisher
-            var notification = await notificationModel.create({docModel:"Game", doc:newGame.id});
+            var notification = await notificationModel.create({docModel:"Game", doc:newGame.id, count:user.followers.length});
             for(var id in user.followers){
                 await userModel.findByIdAndUpdate(user.followers[id], {$push:{notifications:notification.id}});
             }
@@ -148,7 +144,7 @@ router.route("/newGame")
 router.route("/:appid")
     .get(async (req, res, next)=>{
         try {
-            var q = await gameModel.findById(req.params.appid)
+            var game = await gameModel.findById(req.params.appid)
                 .populate({
                     path:"reviews",
                     populate:{path:"user"}
@@ -163,17 +159,18 @@ router.route("/:appid")
             return;
         }
         try{
-            if(!q){
+            if(!game){
+                res.body = "Game not found";
                 res.status(404).render("pages/error", {res:res});
                 res.end();
                 return;
             }
             res.format({
                 html: ()=>{
-                    res.render("pages/games/gameId", {gameData:q, uid:req.session.uid})
+                    res.render("pages/games/gameId", {gameData:game, uid:req.session.uid});
                 },
                 json: ()=>{
-                    res.json(q)
+                    res.json(game);
                 }
             });
             res.status(200).end();

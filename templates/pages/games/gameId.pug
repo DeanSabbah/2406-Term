@@ -29,7 +29,7 @@ html
                 h3 Tags
                 ul
                     for tag,key in gameData.tags
-                        li #[p #{tag}]
+                        li #[a(href=`/search?search=${tag}&type=0`) #{tag}]
             #reviews.col.lower
                 h3 Reviews
                 ul#reviewContent

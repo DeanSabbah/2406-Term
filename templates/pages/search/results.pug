@@ -1,0 +1,30 @@
+html
+    head
+        title Search
+        script(src="search/search.js") 
+        link(rel="stylesheet", href="search/search.css")
+    body(onload=(`init("${qIn.search}", ${qIn.type}, ${qIn.pubOnly})`))
+        include ../../partials/header
+        h1 Search
+        #search.search
+            form(action="./search", method="get") 
+                input#searchText(type="text", name="search", placeholder="Enter search parameter here", required)
+                br
+                label(for="selector") Select game or user
+                    br
+                    select#searchOption(name="type")
+                        option(value="0") Game 
+                        option(value="1") User
+                label#pubOnly.pubOnly.hide(for="pubOnly") #[input#pubOnlyCheck(type="checkbox", name="pubOnly")]Publisher only
+                br
+                button#submit.button(type="submit") Search
+            #results
+                ul#resList
+                    for item in query
+                        li
+                            if type 
+                                a(href=`/users/${item._id}`) #{item.name}
+                            else 
+                                a(href=`/games/${item._id}`) #{item.name}
+                if query.length == 10
+                    button#getMore.button(type="button") Get more

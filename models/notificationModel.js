@@ -11,6 +11,10 @@ const notificationSchema = mongoose.Schema({
         type:Schema.Types.ObjectId,
         required:true,
         refPath:"docModel"
+    },
+    count:{
+        type:Number,
+        required:true
     }
 });
 
