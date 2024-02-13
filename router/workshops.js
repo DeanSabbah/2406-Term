@@ -5,10 +5,6 @@ import userModel from "../models/userModel.js";
 import notificationModel from "../models/notificationModel.js";
 import workshopModel from "../models/workshopModel.js";
 
-router.use((req, res, next)=>{
-    next();
-});
-
 //double checking if user is a publisher
 async function checkPub(req, res){
     if(!req.session.loggedin || !req.session.uid){
