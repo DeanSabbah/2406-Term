@@ -29,6 +29,7 @@ app.use(session({
 
 //logs incoming requests
 app.use((req,res,next)=>{
+	console.log("--------------------------------------");
 	console.log("Method: ", req.method);
 	console.log("URL:    ", req.url);
 	console.log("Path:   ", req.path);
