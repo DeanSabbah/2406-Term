@@ -7,7 +7,8 @@ const worskshopSchema = mongoose.Schema({
 	publisher_id:{type:[Schema.Types.ObjectId], required:true, ref:"User"},
 	desc:{type:String, required:true},
     date:{type:Date, required:true},
-    enrolled:{type:[Schema.Types.ObjectId], ref:"User"}
+    enrolled:{type:[Schema.Types.ObjectId], ref:"User", default:[]},
+    ageRating:{type:Number, default:0, min:0, max:2}
 });
 
 const workshopModel = mongoose.model("Workshop", worskshopSchema, "workshops");

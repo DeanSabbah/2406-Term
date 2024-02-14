@@ -50,6 +50,9 @@ function enroll(){
         if(xhttp.status == 200){
             location.reload();
         }
+        else{
+            alert(xhttp.responseText);
+        }
     }
 }
 

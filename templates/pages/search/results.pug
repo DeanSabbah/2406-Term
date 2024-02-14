@@ -8,14 +8,14 @@ html
         h1 Search
         #search.search
             form(action="./search", method="get") 
-                input#searchText(type="text", name="search", placeholder="Enter search parameter here", required)
+                input#searchText(type="text", name="search", placeholder="Enter search parameter here", value=`${qIn.search}`, required)
                 br
                 label(for="selector") Select game or user
                     br
                     select#searchOption(name="type")
                         option(value="0") Game 
                         option(value="1") User
-                label#pubOnly.pubOnly.hide(for="pubOnly") #[input#pubOnlyCheck(type="checkbox", name="pubOnly")]Publisher only
+                label#pubOnly.pubOnly.hide(for="pubOnly") #[input#pubOnlyCheck(type="checkbox", name="pubOnly", value="true")]Publisher only
                 br
                 button#submit.button(type="submit") Search
             #results
@@ -28,3 +28,5 @@ html
                                 a(href=`/games/${item._id}`) #{item.name}
                 if query.length == 10
                     button#getMore.button(type="button") Get more
+                else 
+                    button#getMore.button.hide(type="button") Get more
