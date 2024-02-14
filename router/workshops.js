@@ -119,7 +119,8 @@ router.route("/enroll")
             }
             user.enrolled[user.enrolled.length] = req.body.wid;
             await user.save();
-            await workshopModel.findByIdAndUpdate(req.body.wid, {$push:{enrolled:req.session.uid}}).exec();
+            workshop.enrolled[workshop.enrolled.length] = req.session.uid;
+            await workshop.save();
             res.status(200).end()
         } catch (error) {
             console.error(error);
