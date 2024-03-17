@@ -118,8 +118,8 @@ router.route("/enroll")
                     break;
             }
             user.enrolled[user.enrolled.length] = req.body.wid;
-            await user.save();
             workshop.enrolled[workshop.enrolled.length] = req.session.uid;
+            await user.save();
             await workshop.save();
             res.status(200).end()
         } catch (error) {
