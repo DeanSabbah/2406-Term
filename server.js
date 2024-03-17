@@ -99,5 +99,5 @@ app.use((req, res)=>{
     res.end();
 });
 
-app.listen(3000);
-console.log("Server running on Port 3000");
+app.listen(10000);
+console.log("Server running on Port 10000");
