@@ -83,6 +83,17 @@ router.route("/notificaiton")
     .delete(async (req, res)=>{
         try {
             var user = await userModel.findById(req.session.uid).exec();
+            for(var notification in user.notifications){
+                console.log("TEST:  ",notification);
+                var noti = await notificationModel.findById(user.notifications[notification]).exec();
+                noti.count--;
+                if(noti.count == 0){
+                    await notificationModel.findByIdAndDelete(noti.id);
+                }
+                else{
+                    await noti.save();
+                }
+            }
             user.notifications = [];
             await user.save();
             res.status(200).end();
@@ -199,15 +210,15 @@ router.route("/:uid")
                 },
                 json: ()=>{
                     //obfuscates data before sending JSON
-                    user.password = "Wouldn't you want to know!";
+                    user.password = undefined;
                     for(var game in user.likes){
-                        user.likes[game] = user.likes[game].id;
+                        user.likes[game] = user.likes[game]._id;
                     }
                     for(var game in user.games){
-                        user.games[game] = user.games[game].id;
+                        user.games[game] = user.games[game]._id;
                     }
                     for(var profile in user.following){
-                        user.following[profile] = user.following[profile].id;
+                        user.following[profile] = user.following[profile]._id;
                     }
                     res.json(user);
                 }

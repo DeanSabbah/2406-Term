@@ -1,5 +1,5 @@
 import express from "express";
-import session from 'express-session';
+import session from 'cookie-session';
 await import("./db.js").then(module => module.default);
 import { readFile } from "fs";
 
@@ -21,14 +21,15 @@ app.use(express.json());
 
 //Creates session token for user
 app.use(session({
-	secret: secret,
+	keys: secret,
 	resave: false,
 	saveUninitialized: false,
 	cookie:{secure: false, httpOnly: true, signed: true}
 }));
 
 //logs incoming requests
-app.use(function(req,res,next){
+app.use((req,res,next)=>{
+	console.log("--------------------------------------");
 	console.log("Method: ", req.method);
 	console.log("URL:    ", req.url);
 	console.log("Path:   ", req.path);

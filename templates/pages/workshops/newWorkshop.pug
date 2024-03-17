@@ -7,8 +7,13 @@ html
         #content.col.center
             form#form
                 label(for="name") Name 
+                label#ratingLabel(for="rating") Rating
                 br
                 input#name(type="text", name="name", placeholder="Name", required)
+                select#rating(name="rating")
+                    option(value="0") Everybody 
+                    option(value="1") Teen
+                    option(value="2") Restricted 
                 br
                 label(for="desc") Description
                 br

@@ -3,10 +3,6 @@ const router = Router();
 import { readFile } from "fs";
 import userModel from "../models/userModel.js";
 
-router.use((req, res, next)=>{
-    next();
-});
-
 //returns true if the user is a publisher (and logged in)
 async function checkPub(req, res){
     if(!req.session.loggedin || !req.session.uid){
@@ -101,7 +97,7 @@ async function register(req, res, next){
             res.status(400).end("Please enter date of birth");
             return;
         }
-        var q = await userModel.findOne({"name":nameIn}).exec();
+        var q = await userModel.findOne({$text:{$search:nameIn}}).exec();
         if(q != null){
             res.status(409).end("User already exists");
             return;

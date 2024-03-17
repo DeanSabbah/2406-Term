@@ -5,10 +5,6 @@ import userModel from "../models/userModel.js";
 import notificationModel from "../models/notificationModel.js";
 import workshopModel from "../models/workshopModel.js";
 
-router.use((req, res, next)=>{
-    next();
-});
-
 //double checking if user is a publisher
 async function checkPub(req, res){
     if(!req.session.loggedin || !req.session.uid){
@@ -102,13 +98,29 @@ router.route("/enroll")
     .put(async (req, res)=>{
         try {
             var user = await userModel.findById(req.session.uid).exec();
+            var workshop = await workshopModel.findById(req.body.wid).exec();
             if(user.enrolled.includes(req.body.wid)){
                 res.status(400).end("Already enrolled");
                 return;
             }
+            switch(workshop.ageRating){
+                case 1:
+                    if(new Date().getUTCFullYear() - new Date(user.dob).getUTCFullYear() < 12){
+                        res.status(401).end("Not old enough");
+                        return;
+                    }
+                    break;
+                case 2:
+                    if(new Date().getUTCFullYear() - new Date(user.dob).getUTCFullYear()  < 18){
+                        res.status(401).end("Not old enough");
+                        return;
+                    }
+                    break;
+            }
             user.enrolled[user.enrolled.length] = req.body.wid;
+            workshop.enrolled[workshop.enrolled.length] = req.session.uid;
             await user.save();
-            await workshopModel.findByIdAndUpdate(req.body.wid, {$push:{enrolled:req.session.uid}}).exec();
+            await workshop.save();
             res.status(200).end()
         } catch (error) {
             console.error(error);
@@ -151,8 +163,8 @@ router.route("/newWorkshop")
                 res.status(409).end("Workshop already exists");
                 return;
             }
-            var workshop = await workshopModel.create({ name: req.body.name, publisher: [user.name], publisher_id: [req.session.uid], desc: req.body.desc,date: req.body.date});
-            var notification = await notificationModel.create({docModel:"Workshop", doc:workshop.id});
+            var workshop = await workshopModel.create({ name: req.body.name, publisher: [user.name], publisher_id: [req.session.uid], desc: req.body.desc, date: req.body.date, ageRating: req.body.rating});
+            var notification = await notificationModel.create({docModel:"Workshop", doc:workshop.id, count:user.followers.length});
             for(var id in user.followers){
                 await userModel.findByIdAndUpdate(user.followers[id], {$push:{notifications:notification.id}});
             }

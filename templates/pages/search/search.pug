@@ -4,7 +4,7 @@ html
         script(src="search/search.js") 
         link(rel="stylesheet", href="search/search.css")
     body(onload=("init()"))
-        include ../partials/header
+        include ../../partials/header
         h1 Search
         #search.search
             form(action="./search", method="get") 
@@ -12,12 +12,12 @@ html
                 br
                 label(for="selector") Select game or user
                     br
-                    select#searchOption(name="selector")
-                        option(value="game") Game 
-                        option(value="user") User
-                label#pubOnly.pubOnly.hide(for="publisher") #[input#pubOnlyCheck(type="checkbox", name="publisher")]Publisher only
+                    select#searchOption(name="type")
+                        option(value="0") Game 
+                        option(value="1") User
+                label#pubOnly.pubOnly.hide(for="pubOnly") #[input#pubOnlyCheck(type="checkbox", name="pubOnly", value="true")]Publisher only
                 br
-                button#submit(type="submit") Search
+                button#submit.button(type="submit") Search
             #results
-                #resList
-                button#getMore.hide(type="button") Get more
+                ul#resList
+                button#getMore.hide.button(type="button") Get more
