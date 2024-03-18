@@ -1,49 +1,49 @@
 html 
-    head 
-        title #{gameData.name}
-        script(src="gameId.js") 
-        link(rel="stylesheet", href="game.css")
-    body(onload=`init("${gameData._id}", "${gameData.publisher_id[0]}")`)
-        include ../../partials/header
-        #info
-            h1 #{gameData.name}
-            #content.col.left
-                img(src=`${gameData.thumbnail}`, alt="thumbnail",)
-                br
-                - var date = new Date(gameData.release_date);
-                p#price Price: $#{gameData.price/100}
-                if gameData.appid 
-                    a#steamLink(href=`https://store.steampowered.com/app/${gameData.appid}`) Get the game here
-                #likes 
-                    p#releaseDate Release date: #{date.getUTCDate()}-#{date.getUTCMonth() + 1}-#{date.getUTCFullYear()}
-                    p.likeText Likes: #{gameData.likes} #[button#likeButton.likeButton(onclick="addLike()")  ❤]
-                #pubs
-                    h3#pubHead Publisher
-                    a.followText(href=`/users/${gameData.publisher_id[0]}`) #{gameData.publisher[0]}
-                    button#followButton.button.follow(onclick="follow()") Follow
-                h3 Description
-                p #{gameData.desc}
-                h4 Genres 
-                p#genres #{gameData.genre}
-            #tags.col.right
-                h3 Tags
-                ul
-                    for tag,key in gameData.tags
-                        li #[a(href=`/search?search=${tag}&type=0`) #{tag}]
-            #reviews.col.lower
-                h3 Reviews
-                ul#reviewContent
-                    for review in gameData.reviews
-                        -var date = new Date(review.date)
-                        li
-                            a(href=`/users/${review.user._id}`) #[h4 #{review.user.name}:]
-                            p Rating: #{review.rating}/10 
-                            p#date Posted: #{date.getUTCDay()}-#{date.getUTCMonth() + 1}-#{date.getUTCFullYear()}
-                            p #{review.text}
-                    form#addReview
-                        h3 Post new review
-                        input#rating(type="number", name="rating", min="0", max="10", placeholder="Rating",required)
-                        br
-                        textarea#reviewText(name="reviewText", cols="120", rows="5", placeholder="Type comment here", required)
-                        br
-                        button#reviewSubmit.button(type="button", onclick="postReview()") Post
+	head 
+		title #{gameData.name}
+		script(src="gameId.js") 
+		link(rel="stylesheet", href="game.css")
+	body(onload=`init("${gameData._id}", "${gameData.publisher_id[0]}")`)
+		include ../../partials/header
+		#info
+			h1 #{gameData.name}
+			#content.col.left
+				img(src=`${gameData.thumbnail}`, alt="thumbnail",)
+				br
+				- var date = Intl.DateTimeFormat('en', {month:"long", day:"numeric", year:"numeric", timeZone:"UTC"}).format(gameData.release_date);
+				p#price Price: $#{gameData.price/100}
+				if gameData.appid 
+					a#steamLink(href=`https://store.steampowered.com/app/${gameData.appid}`) Get the game here
+				#likes 
+					p#releaseDate Release date: #{date}
+					p.likeText Likes: #{gameData.likes} #[button#likeButton.likeButton(onclick="addLike()")  ❤]
+				#pubs
+					h3#pubHead Publisher
+					a.followText(href=`/users/${gameData.publisher_id[0]}`) #{gameData.publisher[0]}
+					button#followButton.button.follow(onclick="follow()") Follow
+				h3 Description
+				p #{gameData.desc}
+				h4 Genres 
+				p#genres #{gameData.genre}
+			#tags.col.right
+				h3 Tags
+				ul
+					for tag,key in gameData.tags
+						li #[a(href=`/search?search=${tag}&type=0`) #{tag}]
+			#reviews.col.lower
+				h3 Reviews
+				ul#reviewContent
+					for review in gameData.reviews
+						-var date = new Date(review.date)
+						li
+							a(href=`/users/${review.user._id}`) #[h4 #{review.user.name}:]
+							p Rating: #{review.rating}/10 
+							p#date Posted: #{date.getUTCDay()}-#{date.getUTCMonth() + 1}-#{date.getUTCFullYear()}
+							p #{review.text}
+					form#addReview
+						h3 Post new review
+						input#rating(type="number", name="rating", min="0", max="10", placeholder="Rating",required)
+						br
+						textarea#reviewText(name="reviewText", cols="120", rows="5", placeholder="Type comment here", required)
+						br
+						button#reviewSubmit.button(type="button", onclick="postReview()") Post

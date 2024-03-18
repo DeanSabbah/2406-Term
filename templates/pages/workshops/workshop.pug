@@ -1,25 +1,25 @@
 html
-    head
-        title #{data.name} Workshop
-        link(rel="stylesheet", href="workshop.css")
-        script(src="workshop.js")
-    body(onload=`init("${data._id}")`)
-        include ../../partials/header
-        #info.col.left
-            h1 #{data.name}
-            h3 By #[a(href=`/users/${data.publisher_id[0]}`) #{data.publisher[0]}]
-            if data.ageRating == 0
-                h4 Rating: Everybody
-            else if data.ageRating == 1
-                h4 Rating: Teen (12+)
-            else
-                h4 Rating: Restricted (18+)
-            - var date = Intl.DateTimeFormat('en', {month:"long", day:"numeric", year:"numeric", timeZone:"UTC"}).format(data.date)
-            p Workshop date: #{date}
-            button#enroll.button.enroll(onclick="enroll()") Enroll
-            p#desc #{data.desc}
-        #enrolled.col.right
-            h3 Enrolled users:
-            for user in data.enrolled
-                a(href=`/users/${user._id}`) #{user.name}
-                br
+	head
+		title #{data.name} Workshop
+		link(rel="stylesheet", href="workshop.css")
+		script(src="workshop.js")
+	body(onload=`init("${data._id}")`)
+		include ../../partials/header
+		#info.col.left
+			h1 #{data.name}
+			h3 By #[a(href=`/users/${data.publisher_id[0]}`) #{data.publisher[0]}]
+			if data.ageRating == 0
+				h4 Rating: Everybody
+			else if data.ageRating == 1
+				h4 Rating: Teen (12+)
+			else
+				h4 Rating: Restricted (18+)
+			- var date = Intl.DateTimeFormat('en', {month:"long", day:"numeric", year:"numeric", timeZone:"UTC"}).format(data.date)
+			p Workshop date: #{date}
+			button#enroll.button.enroll(onclick="enroll()") Enroll
+			p#desc #{data.desc}
+		#enrolled.col.right
+			h3 Enrolled users:
+			for user in data.enrolled
+				a(href=`/users/${user._id}`) #{user.name}
+				br
