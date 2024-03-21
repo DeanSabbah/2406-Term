@@ -24,7 +24,15 @@ html
 				h3 Description
 				p #{gameData.desc}
 				h4 Genres 
-				p#genres #{gameData.genre}
+				-
+					var genres = "";
+					for(var i = 0; i < gameData.genre.length; i++){
+						genres += gameData.genre[i];
+						if(gameData.genre[i + 1] != undefined){
+							genres += ", "
+						}
+					}
+				p#genres #{genres}
 			#tags.col.right
 				h3 Tags
 				ul

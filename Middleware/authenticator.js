@@ -2,6 +2,9 @@
 const db = await import("../db.js").then(module => module.default);
 const usersCollection = db.collection("users");
 
+/**
+ * Will check login, not sure if it will return a bool or set a param in req.session
+ */
 function checkLogin(req, res, next){
     if(!req.session.loggedin || !req.session.uid){
         console.debug("nope")
@@ -13,7 +16,12 @@ function checkLogin(req, res, next){
     }
 }
 
-// Will use type param to determin if user is authorized for type of task
+/**
+ * Will use type param to determin if user is authorized for type of task.
+ * Return may change
+ * @param {Number} type 
+ * @returns {Boolean}
+ */
 function authorized(type, req, res, next){
     switch(type){
         default:
@@ -23,6 +31,9 @@ function authorized(type, req, res, next){
     }
 }
 
+/**
+ * Test function. Do not use.
+ */
 async function test(req, res, next){
     var test = await usersCollection.find({$text: {$search: "Dean"}})
         .toArray();
@@ -35,3 +46,5 @@ export {
     authorized,
     test
 }
+
+export default {checkLogin, authorized, test};

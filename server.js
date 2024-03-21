@@ -6,7 +6,8 @@ import { readFile } from "fs";
 const app = express();
 const secret = ['E4b5JBuO8AI0Lq3yzUn6'];
 
-import {test} from "./Middleware/authenticator.js"
+//import authenticator from "./Middleware/authenticator.js";
+import {checkLogin} from "./Middleware/authenticator.js"
 
 import gameRouter from "./router/games.js";
 import userRouter from "./router/users.js";
@@ -41,12 +42,7 @@ app.use((req,res,next)=>{
 	next();
 });
 
-// Testing async stuff
-/*app.use(async (req, res, next) =>{
-	console.log("starting test");
-	await test(req, res, next)
-	console.log("done");
-});*/
+app.use((req, res, next)=>{checkLogin(req, res, next)});
 
 //assigns routes to routers
 app.use("/games", gameRouter);

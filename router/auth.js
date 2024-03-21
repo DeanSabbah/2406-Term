@@ -124,10 +124,14 @@ router.put("/togglePub", (togglePub));
 //route for log in check
 router.get("/checkLogin", (req, res)=>{
     if(!checkLogin(req, res)){
-        res.status(200).end('false')
+        var data = {res:"false", uid:undefined};
+        res.json(data);
+        res.status(200).end();
         return;
     }
-    res.status(200).end('true');
+    var data = {res:"true", uid:req.session.uid};
+    res.json(data);
+    res.status(200).end();
 });
 
 //route for publisher check
