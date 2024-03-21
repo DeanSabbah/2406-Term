@@ -86,7 +86,7 @@ async function logInCheck(){
         xhttp.open("GET", "/auth/checkLogin");
         xhttp.onload = ()=>{
             var res = JSON.parse(xhttp.response);
-            uid = res.uid;
+            uid = res.uid.toLowerCase();
             resolve(res.res === "true");
         }
         xhttp.onerror = ()=>{
