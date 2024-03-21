@@ -42,8 +42,8 @@ import userModel from "./models/userModel.js";
 //inittializes database. Drops all collections, then adds the games and users collections and populates them
 async function run() {
     try {
-        //const uri = "mongodb+srv://deansabbah:PotatoFucker%236@cluster0.6nrq45v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-        const uri = "mongodb://127.0.0.1:27017/term"
+        const uri = "mongodb+srv://deansabbah:PotatoFucker%236@cluster0.6nrq45v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+        //const uri = "mongodb://127.0.0.1:27017/term"
 
         // Connect to the "term" database
         await mongoose.connect(uri);
