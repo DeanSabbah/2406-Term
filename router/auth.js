@@ -102,7 +102,7 @@ async function register(req, res, next){
             res.status(409).end("User already exists");
             return;
         }
-        await userModel.create({"name":nameIn, password:passIn, dob:dob, isPub:false})
+        await userModel.create({_id:nameIn, name:nameIn, password:passIn, dob:dob, isPub:false})
             .then(newInstance =>{
                 console.log(newInstance);
             })
