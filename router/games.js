@@ -121,7 +121,7 @@ router.route("/newGame")
 			}
 			//if the user provided a Steam appID, then it is added to the docuemnt, allowing the real game to be linked to on the game's page
 			if (!req.body.appid) {
-				var newGame = await gameModel.create({ name: req.body.name, publisher: [user.name], publisher_id: [req.session.uid], price: req.body.price*100, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
+				var newGame = await gameModel.create({ name: req.body.name, publisher: [user.name], price: req.body.price*100, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
 			}
 			else {
 				var newGame = await gameModel.create({ appid: req.body.appid, publisher: [user.name], name: req.body.name, publisher_id: [req.session.uid], price: req.body.price*100, thumbnail: req.body.thumbnail, desc: req.body.desc, genre: genre, tags: tags, release_date: req.body.release_date });
@@ -158,6 +158,8 @@ router.route("/:appid")
 			res.end()
 			return;
 		}
+		console.log(game)
+		console.log(game.publisher)
 		try{
 			if(!game){
 				res.body = "Game not found";

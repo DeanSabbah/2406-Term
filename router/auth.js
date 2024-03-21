@@ -102,7 +102,7 @@ async function register(req, res, next){
             res.status(409).end("User already exists");
             return;
         }
-        await userModel.create({"name":nameIn, password:passIn, dob:dob, isPub:false})
+        await userModel.create({_id:nameIn, name:nameIn, password:passIn, dob:dob, isPub:false})
             .then(newInstance =>{
                 console.log(newInstance);
             })
@@ -124,10 +124,14 @@ router.put("/togglePub", (togglePub));
 //route for log in check
 router.get("/checkLogin", (req, res)=>{
     if(!checkLogin(req, res)){
-        res.status(200).end('false')
+        var data = {res:"false", uid:undefined};
+        res.json(data);
+        res.status(200).end();
         return;
     }
-    res.status(200).end('true');
+    var data = {res:"true", uid:req.session.uid};
+    res.json(data);
+    res.status(200).end();
 });
 
 //route for publisher check
