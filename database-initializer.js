@@ -30,7 +30,7 @@ games.forEach(game => {
 });
 
 users.forEach(user => {
-    user._id = user.name;
+    user._id = user.name.toLowerCase();
     user.dob = "1900-01-01";
     user.isPub = true;
 })

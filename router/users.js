@@ -168,7 +168,7 @@ router.route("/:uid")
 	.get(async (req, res)=>{
 		try {
 			//checks for my profile as param
-			var id = req.params.uid;
+			var id = req.params.uid.toLowerCase();
 			//finds user and populates the details to use in page rendering
 			var user = await userModel.findById(id)
 				.populate("likes")
