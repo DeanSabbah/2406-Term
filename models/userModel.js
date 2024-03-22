@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = mongoose.Schema({
+	_id: String,
 	name: {type:String, required:true},
 	password: {type:String, required:true},
 	likes: [{type:Schema.Types.ObjectId, ref:"Game"}],
@@ -14,7 +15,7 @@ const userSchema = mongoose.Schema({
     games: [{type:Schema.Types.ObjectId, ref:"Game"}],
     workshops: [{type:Schema.Types.ObjectId, ref:"Workshop"}],
 	enrolled: [{type:Schema.Types.ObjectId, ref:"Workshop"}]
-});
+}, {_id: false});
 
 //add the name property to a text index making queries for them much easier
 userSchema.index({name:"text"});

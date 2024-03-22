@@ -1,3 +1,5 @@
+var uid;
+
 //Checks if the user is logged. If true, calls the showElms function
 async function init_header(){
     if(await logInCheck()){
@@ -43,6 +45,7 @@ window.onclick = function(event) {
 //Displays elements that are only availiable to users and populates the notificaiton tray if there are new notificaitons.
 function showElms(){
     document.getElementById("myProfile").removeAttribute("hidden");
+    document.getElementById("myProfile").setAttribute("href", `/users/${uid}`);
     document.getElementById("logout").removeAttribute("hidden");
     document.getElementById("dropButton").removeAttribute("hidden");
     document.getElementById("register").hidden = true;
@@ -82,7 +85,9 @@ async function logInCheck(){
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "/auth/checkLogin");
         xhttp.onload = ()=>{
-            resolve(xhttp.responseText === "true");
+            var res = JSON.parse(xhttp.response);
+            uid = res.uid.toLowerCase();
+            resolve(res.res === "true");
         }
         xhttp.onerror = ()=>{
             reject(xhttp.status);

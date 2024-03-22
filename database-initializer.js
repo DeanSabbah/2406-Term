@@ -30,6 +30,7 @@ games.forEach(game => {
 });
 
 users.forEach(user => {
+    user._id = user.name.toLowerCase();
     user.dob = "1900-01-01";
     user.isPub = true;
 })
@@ -42,6 +43,7 @@ import userModel from "./models/userModel.js";
 async function run() {
     try {
         const uri = "mongodb+srv://deansabbah:PotatoFucker%236@cluster0.6nrq45v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+        //const uri = "mongodb://127.0.0.1:27017/term"
 
         // Connect to the "term" database
         await mongoose.connect(uri);
@@ -101,23 +103,10 @@ async function run() {
                     else {
                         user.games.push(game._id);
                     }
-                    if (!game.publisher_id) {
-                        game.publisher_id = [user._id];
-                    }
-                    else {
-                        game.publisher_id[game.publisher.indexOf(`${user.name}`)] = user._id;
-                    }
                 }
             })
-        })
-        result1 = await gamesCollection.drop();
-        if (result1) {
-            console.log("Games collection has been dropped.")
-        }
-        // Insert the defined document into the "games" collection
-        result = await gamesCollection.insertMany(gamesIn);
-        console.log("Successfuly inserted " + result.insertedCount + " games.");
-
+        });
+        
         result1_u = await usersCollection.drop();
         if (result1_u) {
             console.log("Users collection has been dropped.")

@@ -6,6 +6,9 @@ import { readFile } from "fs";
 const app = express();
 const secret = ['E4b5JBuO8AI0Lq3yzUn6'];
 
+//import authenticator from "./Middleware/authenticator.js";
+import {checkLogin} from "./Middleware/authenticator.js"
+
 import gameRouter from "./router/games.js";
 import userRouter from "./router/users.js";
 import authRouter from "./router/auth.js";
@@ -38,6 +41,8 @@ app.use((req,res,next)=>{
 	console.log("Time:	 ", new Date().toLocaleString());
 	next();
 });
+
+app.use((req, res, next)=>{checkLogin(req, res, next)});
 
 //assigns routes to routers
 app.use("/games", gameRouter);
@@ -100,5 +105,5 @@ app.use((req, res)=>{
     res.end();
 });
 
-app.listen(3000);
-console.log("Server running on Port 3000");
+app.listen(10000);
+console.log("Server running on Port 10000");
