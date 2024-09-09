@@ -91,7 +91,6 @@ async function register(req, res, next){
             return;
         }
         var nameIn = req.body.username;
-        var id = nameIn.toLowerCase()
         var passIn = req.body.password;
         var dob = Date.parse(req.body.dob);
         if(!dob){
@@ -103,7 +102,7 @@ async function register(req, res, next){
             res.status(409).end("User already exists");
             return;
         }
-        await userModel.create({_id:id, name:nameIn, password:passIn, dob:dob, isPub:false})
+        await userModel.create({name:nameIn, password:passIn, dob:dob, isPub:false})
             .then(newInstance =>{
                 console.log(newInstance);
             })

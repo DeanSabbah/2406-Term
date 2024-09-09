@@ -7,7 +7,7 @@ const app = express();
 const secret = ['E4b5JBuO8AI0Lq3yzUn6'];
 
 //import authenticator from "./Middleware/authenticator.js";
-import {checkLogin} from "./Middleware/authenticator.js"
+//import {authorized} from "./Middleware/authenticator.js"
 
 import gameRouter from "./router/games.js";
 import userRouter from "./router/users.js";
@@ -31,7 +31,7 @@ app.use(session({
 }));
 
 //logs incoming requests
-app.use((req,res,next)=>{
+app.use((req, res, next)=>{
 	console.log("--------------------------------------");
 	console.log("Method: ", req.method);
 	console.log("URL:    ", req.url);
@@ -41,8 +41,6 @@ app.use((req,res,next)=>{
 	console.log("Time:	 ", new Date().toLocaleString());
 	next();
 });
-
-app.use((req, res, next)=>{checkLogin(req, res, next)});
 
 //assigns routes to routers
 app.use("/games", gameRouter);
