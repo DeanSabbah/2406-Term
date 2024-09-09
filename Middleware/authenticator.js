@@ -26,8 +26,9 @@ function authorized(type, req, res, next){
     switch(type){
         default:
             console.error("Auth case not defined");
-            res.status(500).end("Auth case not defined");
-            return;
+            res.status(400);
+            next();
+            break;
     }
 }
 
